@@ -59,3 +59,5 @@ df['image_url'] = (
 
 df.to_csv("dataset/products_with_images.csv", index=False)
 print(df) 
+
+mylist = [1, 2, 3, 4, 5]
