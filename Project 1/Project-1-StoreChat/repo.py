@@ -2,6 +2,7 @@ import os
 import psycopg2
 import pandas as pd
 from psycopg2.extras import RealDictCursor
+import validateService
 
 DB_NAME = os.getenv("PGDB", "storechat")
 DB_USER = os.getenv("PGUSER", "")
@@ -30,8 +31,11 @@ def load_data():
             (row["category_id"], row["category_name"])
             )
 
-        # Load Products
-        product_df  = pd.read_csv("dataset/products_with_images.csv")
+        # Load and validate Products
+        product_df = pd.read_csv("dataset/products_with_images.csv")
+        product_df, rejected_df = validateService.clean_dataframe(product_df, True)
+        print(f"Rejected {len(rejected_df)} rows")
+        
         for _, row in product_df.iterrows():
             cur.execute("INSERT INTO products (product_id, product_name, category_id, launch_date, price, image_url) VALUES (%s, %s, %s, %s, %s, %s) ON CONFLICT (product_id) DO NOTHING",
             (row['product_id'], row['product_name'], row['category_id'], 
