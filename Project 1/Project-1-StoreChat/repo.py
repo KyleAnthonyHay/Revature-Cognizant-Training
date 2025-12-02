@@ -17,15 +17,15 @@ def get_conn():
 
 def init_db():
     with get_conn() as conn, conn.cursor() as cur:
-        with open("schema.sql", "r", encoding="utf-8") as f:
+        with open("schema.sql", "r", encoding="utf-8") as f: # TODO : add try catch
             cur.execute(f.read())
         conn.commit()
 
 def load_data():
     """ Load data from CSV files into the database """
-    with get_conn() as conn, conn.cursor() as cur:
+    with get_conn() as conn, conn.cursor() as cur: # # TODO : add try catch
         # Load categories first (required for foreign key)
-        category_df = pd.read_csv("dataset/category.csv")
+        category_df = pd.read_csv("dataset/category.csv") # TODO : add try catch
         for _, row in category_df.iterrows():
             cur.execute("INSERT INTO categories (category_id, category_name) VALUES (%s, %s) ON CONFLICT (category_id) DO NOTHING",
             (row["category_id"], row["category_name"])
