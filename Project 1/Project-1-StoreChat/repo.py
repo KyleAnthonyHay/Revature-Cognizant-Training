@@ -3,6 +3,7 @@ import psycopg2
 import pandas as pd
 from psycopg2.extras import RealDictCursor
 import validateService
+import logger
 
 DB_NAME = os.getenv("PGDB", "storechat")
 DB_USER = os.getenv("PGUSER", "")
@@ -17,25 +18,58 @@ def get_conn():
 
 def init_db():
     with get_conn() as conn, conn.cursor() as cur:
-        with open("schema.sql", "r", encoding="utf-8") as f: # TODO : add try catch
-            cur.execute(f.read())
+        try:
+            logger.log_info("Opening schema.sql file")
+            with open("schema.sql", "r", encoding="utf-8") as f:
+                cur.execute(f.read())
+            logger.log_info("Schema.sql file opened successfully")
+
+        except FileNotFoundError:
+            logger.log_error("Schema.sql file not found")
+            raise 
+
+        except Exception as e:
+            logger.log_error(f"Error opening schema.sql file: {e}")
+            raise 
+
         conn.commit()
 
 def load_data():
     """ Load data from CSV files into the database """
     with get_conn() as conn, conn.cursor() as cur: # # TODO : add try catch
-        # Load categories first (required for foreign key)
-        category_df = pd.read_csv("dataset/category.csv") # TODO : add try catch
+        # LOAD CSV FILE
+        try:
+            logger.log_info("Reading category.csv file")
+            category_df = pd.read_csv("dataset/category.csv")
+            logger.log_info(f"Category.csv file read successfully with {len(category_df)} rows")
+        except FileNotFoundError:
+            logger.log_error("Category.csv file not found")
+            raise
+        except Exception as e:
+            logger.log_error(f"Error reading category.csv file: {e}")
+            raise
+
+        #---------------LOAD CATEGORIES INTO DATABASE---------------
         for _, row in category_df.iterrows():
             cur.execute("INSERT INTO categories (category_id, category_name) VALUES (%s, %s) ON CONFLICT (category_id) DO NOTHING",
             (row["category_id"], row["category_name"])
             )
 
-        # Load and validate Products
-        product_df = pd.read_csv("dataset/products_with_images.csv")
+        #---------------LOAD PRODUCTS CSV FILE---------------
+        try:
+            logger.log_info("Reading products_with_images.csv file")
+            product_df = pd.read_csv("dataset/products_with_images.csv")
+            logger.log_info(f"products_with_images.csv file read successfully with {len(product_df)} rows")
+        except FileNotFoundError:
+            logger.log_error("products_with_images.csv file not found")
+            raise
+        except Exception as e:
+            logger.log_error(f"Error reading products_with_images.csv file: {e}")
+            raise
+        #---------------VALIDATE PRODUCTS DATAFRAME---------------
         product_df, rejected_df = validateService.clean_dataframe(product_df, True)
         print(f"Rejected {len(rejected_df)} rows")
-        
+        #---------------LOAD PRODUCTS INTO DATABASE---------------
         for _, row in product_df.iterrows():
             cur.execute("INSERT INTO products (product_id, product_name, category_id, launch_date, price, image_url) VALUES (%s, %s, %s, %s, %s, %s) ON CONFLICT (product_id) DO NOTHING",
             (row['product_id'], row['product_name'], row['category_id'], 

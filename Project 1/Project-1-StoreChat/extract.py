@@ -1,4 +1,5 @@
 import pandas as pd
+import logger
 
 def clean_column_names(df):
     df.columns = (
@@ -8,12 +9,14 @@ def clean_column_names(df):
         .str.replace(" ", "_")
         .str.replace("-", "_")
     )
+    logger.log_info("EXRACT: Column names cleaned")
     return df
 
 def convert_data_types(df):
     df['price'] = df['price'].astype(float)
     df['launch_date'] = pd.to_datetime(df['launch_date'])
     df["product_name"] = df["product_name"].astype(str)
+    logger.log_info("EXRACT: Data types converted")
     return df
 
 def validate_data(df):
@@ -42,6 +45,7 @@ def add_category_images(df):
         "CAT-10": "images/Wearable.jpg",
     }
     df['image_url'] = df['category_id'].map(category_mapping)
+    logger.log_info("EXRACT: Category images added")
     return df
 
 def process_products(input_file, output_file):
@@ -51,6 +55,7 @@ def process_products(input_file, output_file):
     validation_results = validate_data(df)
     df = add_category_images(df)
     df.to_csv(output_file, index=False)
+    logger.log_info("EXRACT: Products processed successfully")
     return df, validation_results
 
 if __name__ == "__main__":

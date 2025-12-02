@@ -1,6 +1,16 @@
 import logging
+import os
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+log_file = os.getenv("LOG_FILE", "logs/app.log")
+os.makedirs(os.path.dirname(log_file), exist_ok=True)
+
+logging.basicConfig(level=logging.INFO, 
+                    format='%(asctime)s - %(levelname)s - %(message)s',
+                    handlers=[
+                        logging.FileHandler(log_file), 
+                        logging.StreamHandler()
+                    ]
+        )
 logger = logging.getLogger(__name__)
 
 def log_info(message):
