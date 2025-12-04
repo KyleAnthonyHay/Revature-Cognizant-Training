@@ -1,3 +1,25 @@
-2025-12-02 14:52:37,716 - INFO - EXRACT: Column names cleaned
-2025-12-02 14:52:37,717 - INFO - EXRACT: Data types converted
-2025-12-02 14:52:37,717 - INFO - EXRACT: Category images added
+2025-12-04 14:13:09,100 - INFO - EXRACT: Column names cleaned
+2025-12-04 14:13:09,101 - INFO - EXRACT: Data types converted
+2025-12-04 14:13:09,102 - INFO - EXRACT: Category images added
+2025-12-04 14:13:18,199 - INFO - Opening schema.sql file
+2025-12-04 14:13:18,200 - INFO - Schema.sql file opened successfully
+2025-12-04 14:13:18,206 - INFO - Reading category.csv file
+2025-12-04 14:13:18,207 - INFO - Category.csv file read successfully with 10 rows
+2025-12-04 14:13:18,209 - INFO - Reading products_with_images.csv file
+2025-12-04 14:13:18,210 - INFO - products_with_images.csv file read successfully with 94 rows
+2025-12-04 14:13:18,210 - WARNING - Rejected 4 rows: Missing required values
+2025-12-04 14:13:18,210 - WARNING - Rejected 1 rows: Negative prices
+2025-12-04 14:13:18,243 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8000
+2025-12-04 14:13:18,243 - INFO - [33mPress CTRL+C to quit[0m
+2025-12-04 14:13:18,243 - INFO -  * Restarting with stat
+2025-12-04 14:13:18,458 - INFO - Opening schema.sql file
+2025-12-04 14:13:18,458 - INFO - Schema.sql file opened successfully
+2025-12-04 14:13:18,464 - INFO - Reading category.csv file
+2025-12-04 14:13:18,466 - INFO - Category.csv file read successfully with 10 rows
+2025-12-04 14:13:18,468 - INFO - Reading products_with_images.csv file
+2025-12-04 14:13:18,469 - INFO - products_with_images.csv file read successfully with 94 rows
+2025-12-04 14:13:18,470 - WARNING - Rejected 4 rows: Missing required values
+2025-12-04 14:13:18,470 - WARNING - Rejected 1 rows: Negative prices
+2025-12-04 14:13:18,499 - WARNING -  * Debugger is active!
+2025-12-04 14:13:18,508 - INFO -  * Debugger PIN: 799-965-798
