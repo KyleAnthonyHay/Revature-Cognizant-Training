@@ -1,5 +1,6 @@
 import pandas as pd
-import logger
+# import logger
+from src import logger
 
 def clean_column_names(df):
     df.columns = (
@@ -33,16 +34,16 @@ def validate_data(df):
 
 def add_category_images(df):
     category_mapping = {
-        "CAT-1": "images/Accessories.jpg",
-        "CAT-2": "images/Audio.jpg",
-        "CAT-3": "images/Desktop.jpg",
+        "CAT-1": "../dataset/images/Accessories.jpg",
+        "CAT-2": "../dataset/images/Audio.jpg",
+        "CAT-3": "../dataset/images/Desktop.jpg",
         "CAT-4": "images/Laptop.jpg",
-        "CAT-5": "images/Smart_Speaker.jpg",
-        "CAT-6": "images/Smartphone.jpg",
-        "CAT-7": "images/Streaming_Device.jpg",
-        "CAT-8": "images/Subscription_Service.jpg",
-        "CAT-9": "images/Tablet.jpg",
-        "CAT-10": "images/Wearable.jpg",
+        "CAT-5": "../dataset/images/Smart_Speaker.jpg",
+        "CAT-6": "../dataset/images/Smartphone.jpg",
+        "CAT-7": "../dataset/images/Streaming_Device.jpg",
+        "CAT-8": "../dataset/images/Subscription_Service.jpg",
+        "CAT-9": "../dataset/images/Tablet.jpg",
+        "CAT-10": "../dataset/images/Wearable.jpg",
     }
     df['image_url'] = df['category_id'].map(category_mapping)
     logger.log_info("EXRACT: Category images added")
@@ -59,7 +60,7 @@ def process_products(input_file, output_file):
     return df, validation_results
 
 if __name__ == "__main__": # pragma: no cover
-    df = pd.read_csv("dataset/products.csv")
+    df = pd.read_csv("../dataset/products.csv")
     print(df.head())
     
     df = clean_column_names(df)
@@ -76,5 +77,5 @@ if __name__ == "__main__": # pragma: no cover
     print("\n---------------Add Category Images-----------------")
     df = add_category_images(df)
     
-    df.to_csv("dataset/products_with_images.csv", index=False)
+    df.to_csv("../dataset/products_with_images.csv", index=False)
     print(df)

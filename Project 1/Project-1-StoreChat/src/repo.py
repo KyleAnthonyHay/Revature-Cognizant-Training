@@ -20,7 +20,7 @@ def init_db():
     with get_conn() as conn, conn.cursor() as cur:
         try:
             logger.log_info("Opening schema.sql file")
-            with open("schema.sql", "r", encoding="utf-8") as f:
+            with open("../schema.sql", "r", encoding="utf-8") as f:
                 cur.execute(f.read())
             logger.log_info("Schema.sql file opened successfully")
 
@@ -41,7 +41,7 @@ def load_data():
         #---------------LOAD CATEGORIES CSV FILE---------------
         try:
             logger.log_info("Reading category.csv file")
-            category_df = pd.read_csv("dataset/category.csv")
+            category_df = pd.read_csv("../dataset/category.csv")
             logger.log_info(f"Category.csv file read successfully with {len(category_df)} rows")
         except FileNotFoundError:
             logger.log_error("Category.csv file not found")
@@ -70,7 +70,7 @@ def load_data():
         #---------------LOAD PRODUCTS CSV FILE---------------
         try:
             logger.log_info("Reading products_with_images.csv file")
-            product_df = pd.read_csv("dataset/products_with_images.csv")
+            product_df = pd.read_csv("../dataset/products_with_images.csv")
             logger.log_info(f"products_with_images.csv file read successfully with {len(product_df)} rows")
         except FileNotFoundError:
             logger.log_error("products_with_images.csv file not found")

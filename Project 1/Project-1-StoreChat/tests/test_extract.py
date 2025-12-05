@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
 import os
-from extract import (
+from src.extract import (
     clean_column_names,
     convert_data_types,
     validate_data,
@@ -46,8 +46,8 @@ def test_add_category_images(sample_df):
     df = clean_column_names(sample_df.copy())
     result = add_category_images(df)
     assert 'image_url' in result.columns
-    assert result.loc[0, 'image_url'] == 'images/Accessories.jpg'
-    assert result.loc[1, 'image_url'] == 'images/Audio.jpg'
+    assert result.loc[0, 'image_url'] == '../dataset/images/Accessories.jpg'
+    assert result.loc[1, 'image_url'] == '../dataset/images/Audio.jpg'
     
 def test_process_products(tmp_path, sample_df):
     input_file = tmp_path / "test_input.csv"
