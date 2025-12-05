@@ -58,7 +58,7 @@ def process_products(input_file, output_file):
     logger.log_info("EXRACT: Products processed successfully")
     return df, validation_results
 
-if __name__ == "__main__":
+if __name__ == "__main__": # pragma: no cover
     df = pd.read_csv("dataset/products.csv")
     print(df.head())
     

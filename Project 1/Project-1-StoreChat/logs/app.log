@@ -23,3 +23,59 @@
 2025-12-04 14:13:18,470 - WARNING - Rejected 1 rows: Negative prices
 2025-12-04 14:13:18,499 - WARNING -  * Debugger is active!
 2025-12-04 14:13:18,508 - INFO -  * Debugger PIN: 799-965-798
+2025-12-05 09:23:35,420 - INFO - Opening schema.sql file
+2025-12-05 09:23:35,421 - INFO - Schema.sql file opened successfully
+2025-12-05 09:23:35,426 - INFO - Reading category.csv file
+2025-12-05 09:23:35,430 - INFO - Category.csv file read successfully with 10 rows
+2025-12-05 09:23:35,437 - INFO - Reading products_with_images.csv file
+2025-12-05 09:23:35,437 - INFO - products_with_images.csv file read successfully with 94 rows
+2025-12-05 09:23:35,438 - WARNING - Rejected 4 rows: Missing required values
+2025-12-05 09:23:35,438 - WARNING - Rejected 1 rows: Negative prices
+2025-12-05 14:26:41,979 - INFO - Opening schema.sql file
+2025-12-05 14:26:41,991 - INFO - Schema.sql file opened successfully
+2025-12-05 14:26:42,000 - INFO - Reading category.csv file
+2025-12-05 14:26:42,003 - INFO - Category.csv file read successfully with 10 rows
+2025-12-05 14:26:42,009 - INFO - Reading products_with_images.csv file
+2025-12-05 14:26:42,010 - INFO - products_with_images.csv file read successfully with 94 rows
+2025-12-05 14:26:42,011 - WARNING - Rejected 4 rows: Missing required values
+2025-12-05 14:26:42,011 - WARNING - Rejected 1 rows: Negative prices
+2025-12-05 14:41:18,812 - INFO - Opening schema.sql file
+2025-12-05 14:41:18,813 - INFO - Schema.sql file opened successfully
+2025-12-05 14:41:18,819 - INFO - Reading category.csv file
+2025-12-05 14:41:18,820 - INFO - Category.csv file read successfully with 10 rows
+2025-12-05 14:41:18,824 - INFO - Reading products_with_images.csv file
+2025-12-05 14:41:18,825 - INFO - products_with_images.csv file read successfully with 94 rows
+2025-12-05 14:41:18,828 - WARNING - Rejected 4 rows: Missing required values
+2025-12-05 14:41:18,828 - WARNING - Rejected 1 rows: Negative prices
+2025-12-05 14:43:08,620 - INFO - Opening schema.sql file
+2025-12-05 14:43:08,621 - INFO - Schema.sql file opened successfully
+2025-12-05 14:43:08,627 - INFO - Reading category.csv file
+2025-12-05 14:43:08,628 - INFO - Category.csv file read successfully with 10 rows
+2025-12-05 14:43:08,631 - INFO - Reading products_with_images.csv file
+2025-12-05 14:43:08,631 - INFO - products_with_images.csv file read successfully with 94 rows
+2025-12-05 14:43:08,634 - WARNING - Rejected 4 rows: Missing required values
+2025-12-05 14:43:08,634 - WARNING - Rejected 1 rows: Negative prices
+2025-12-05 14:43:49,202 - INFO - Opening schema.sql file
+2025-12-05 14:43:49,210 - INFO - Schema.sql file opened successfully
+2025-12-05 14:43:49,216 - INFO - Reading category.csv file
+2025-12-05 14:43:49,217 - INFO - Category.csv file read successfully with 10 rows
+2025-12-05 14:43:49,220 - INFO - Reading products_with_images.csv file
+2025-12-05 14:43:49,221 - INFO - products_with_images.csv file read successfully with 94 rows
+2025-12-05 14:43:49,223 - WARNING - Rejected 4 rows: Missing required values
+2025-12-05 14:43:49,224 - WARNING - Rejected 1 rows: Negative prices
+2025-12-05 14:44:04,884 - INFO - Opening schema.sql file
+2025-12-05 14:44:04,885 - INFO - Schema.sql file opened successfully
+2025-12-05 14:44:04,891 - INFO - Reading category.csv file
+2025-12-05 14:44:04,892 - INFO - Category.csv file read successfully with 10 rows
+2025-12-05 14:44:04,895 - INFO - Reading products_with_images.csv file
+2025-12-05 14:44:04,895 - INFO - products_with_images.csv file read successfully with 94 rows
+2025-12-05 14:44:04,898 - WARNING - Rejected 4 rows: Missing required values
+2025-12-05 14:44:04,898 - WARNING - Rejected 1 rows: Negative prices
+2025-12-05 14:44:53,301 - INFO - Opening schema.sql file
+2025-12-05 14:44:53,301 - INFO - Schema.sql file opened successfully
+2025-12-05 14:44:53,306 - INFO - Reading category.csv file
+2025-12-05 14:44:53,307 - INFO - Category.csv file read successfully with 10 rows
+2025-12-05 14:44:53,311 - INFO - Reading products_with_images.csv file
+2025-12-05 14:44:53,311 - INFO - products_with_images.csv file read successfully with 94 rows
+2025-12-05 14:44:53,314 - WARNING - Rejected 4 rows: Missing required values
+2025-12-05 14:44:53,314 - WARNING - Rejected 1 rows: Negative prices

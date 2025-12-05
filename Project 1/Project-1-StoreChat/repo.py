@@ -37,7 +37,8 @@ def init_db():
 def load_data():
     """ Load data from CSV files into the database """
     with get_conn() as conn, conn.cursor() as cur: # # TODO : add try catch
-        # LOAD CSV FILE
+
+        #---------------LOAD CATEGORIES CSV FILE---------------
         try:
             logger.log_info("Reading category.csv file")
             category_df = pd.read_csv("dataset/category.csv")
@@ -48,7 +49,18 @@ def load_data():
         except Exception as e:
             logger.log_error(f"Error reading category.csv file: {e}")
             raise
-
+        #---------------VALIDATE CATEGORIES DATAFRAME---------------
+        category_df, rejected_df = validateService.clean_dataframe(category_df, False)
+        #---------------SAVE REJECTED CATEGORIES---------------
+        if len(rejected_df) > 0:
+            for _, row in rejected_df.iterrows():
+                reason = row.get('rejection_reason', 'Validation failed')
+                row_data = row.drop('rejection_reason').to_dict() if 'rejection_reason' in row else row.to_dict()
+                cur.execute(
+                    "INSERT INTO rejected_fields (source_table, rejection_reason, rejected_data) VALUES (%s, %s, %s)",
+                    ("categories", reason, pd.Series(row_data).to_json())
+                )
+        print(f"Rejected {len(rejected_df)} rows from category.csv file")
         #---------------LOAD CATEGORIES INTO DATABASE---------------
         for _, row in category_df.iterrows():
             cur.execute("INSERT INTO categories (category_id, category_name) VALUES (%s, %s) ON CONFLICT (category_id) DO NOTHING",
@@ -68,7 +80,16 @@ def load_data():
             raise
         #---------------VALIDATE PRODUCTS DATAFRAME---------------
         product_df, rejected_df = validateService.clean_dataframe(product_df, True)
-        print(f"Rejected {len(rejected_df)} rows")
+        #---------------SAVE REJECTED PRODUCTS---------------
+        if len(rejected_df) > 0:
+            for _, row in rejected_df.iterrows():
+                reason = row.get('rejection_reason', 'Validation failed')
+                row_data = row.drop('rejection_reason').to_dict() if 'rejection_reason' in row else row.to_dict()
+                cur.execute(
+                    "INSERT INTO rejected_fields (source_table, rejection_reason, rejected_data) VALUES (%s, %s, %s)",
+                    ("products", reason, pd.Series(row_data).to_json())
+                )
+        print(f"Rejected {len(rejected_df)} rows from products_with_images.csv file")
         #---------------LOAD PRODUCTS INTO DATABASE---------------
         for _, row in product_df.iterrows():
             cur.execute("INSERT INTO products (product_id, product_name, category_id, launch_date, price, image_url) VALUES (%s, %s, %s, %s, %s, %s) ON CONFLICT (product_id) DO NOTHING",

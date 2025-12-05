@@ -1,0 +1,9 @@
+[run]
+source = .
+
+omit =
+    tests/*
+    */tests/*
+    app.py
+    repo.py
+    logger.py 

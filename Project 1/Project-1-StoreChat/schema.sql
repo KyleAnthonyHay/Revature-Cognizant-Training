@@ -12,5 +12,14 @@ CREATE TABLE IF NOT EXISTS products (
     image_url VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS rejected_fields ( 
+    rejected_id SERIAL PRIMARY KEY,
+    source_table VARCHAR(255) NOT NULL,
+    rejection_reason TEXT NOT NULL,
+    rejected_data JSONB NOT NULL,
+    rejected_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+
 -- CREATE INDEX IF NOT EXISTS idx_products_category ON products (category_id);
 -- CREATE INDEX IF NOT EXISTS idx_products_launch_date ON products (launch_date);
