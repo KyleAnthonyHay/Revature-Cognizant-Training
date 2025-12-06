@@ -80,7 +80,7 @@ def load_data():
             raise
         #---------------VALIDATE PRODUCTS DATAFRAME---------------
         product_df, rejected_df = validateService.clean_dataframe(product_df, True)
-        #---------------SAVE REJECTED PRODUCTS---------------
+        #---------------LOAD REJECTED PRODUCTS INTO DATABASE---------------
         if len(rejected_df) > 0:
             for _, row in rejected_df.iterrows():
                 reason = row.get('rejection_reason', 'Validation failed')

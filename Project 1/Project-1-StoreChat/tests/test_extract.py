@@ -8,7 +8,7 @@ from src.extract import (
     add_category_images,
     process_products
 )
-
+#--------------------------------Fixtures--------------------------------
 @pytest.fixture
 def sample_df():
     return pd.DataFrame({
@@ -19,6 +19,7 @@ def sample_df():
         'Price': ['100.50', '200.75']
     })
 
+#--------------------------------Tests--------------------------------
 def test_clean_column_names(sample_df):
     result = clean_column_names(sample_df.copy())
     assert 'product_id' in result.columns
