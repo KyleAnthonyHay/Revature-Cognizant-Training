@@ -1,6 +1,8 @@
 import pandas as pd
-# import logger
-from src import logger
+try:
+    from src import logger
+except ImportError:
+    import logger
 
 
 def clean_dataframe(df: pd.DataFrame, enforce_positive_price: bool):

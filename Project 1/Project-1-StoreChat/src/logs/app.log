@@ -42,3 +42,217 @@
 2025-12-05 15:11:54,434 - INFO - products_with_images.csv file read successfully with 94 rows
 2025-12-05 15:11:54,436 - WARNING - Rejected 4 rows: Missing required values
 2025-12-05 15:11:54,437 - WARNING - Rejected 1 rows: Negative prices
+2025-12-06 16:43:01,173 - INFO - EXRACT: Column names cleaned
+2025-12-06 16:43:01,176 - INFO - EXRACT: Data types converted
+2025-12-06 16:43:01,177 - INFO - EXRACT: Category images added
+2025-12-06 16:49:42,005 - INFO - Opening schema.sql file
+2025-12-06 16:49:42,012 - ERROR - Error opening schema.sql file: syntax error at or near "#"
+LINE 23: #--------------------------------STORES ANDSALES TABLES-----...
+         ^
+
+2025-12-06 16:56:16,596 - INFO - Opening schema.sql file
+2025-12-06 16:56:16,596 - ERROR - Error opening schema.sql file: syntax error at or near "#"
+LINE 23: #--------------------------------STORES ANDSALES TABLES-----...
+         ^
+
+2025-12-06 16:56:38,832 - INFO - Opening schema.sql file
+2025-12-06 16:56:38,833 - ERROR - Error opening schema.sql file: syntax error at or near "#"
+LINE 23: #--------------------------------STORES ANDSALES TABLES-----...
+         ^
+
+2025-12-06 16:58:02,343 - INFO - Opening schema.sql file
+2025-12-06 16:58:02,363 - INFO - Schema.sql file opened successfully
+2025-12-06 16:58:02,369 - INFO - Reading category.csv file
+2025-12-06 16:58:02,370 - INFO - Category.csv file read successfully with 10 rows
+2025-12-06 16:58:02,373 - INFO - Reading products_with_images.csv file
+2025-12-06 16:58:02,374 - INFO - products_with_images.csv file read successfully with 94 rows
+2025-12-06 16:58:02,377 - WARNING - Rejected 4 rows: Missing required values
+2025-12-06 16:58:02,377 - WARNING - Rejected 1 rows: Negative prices
+2025-12-06 17:06:51,117 - INFO - Opening schema.sql file
+2025-12-06 17:06:51,119 - INFO - Schema.sql file opened successfully
+2025-12-06 17:06:51,124 - INFO - Reading category.csv file
+2025-12-06 17:06:51,125 - INFO - Category.csv file read successfully with 10 rows
+2025-12-06 17:06:51,128 - INFO - Reading products_with_images.csv file
+2025-12-06 17:06:51,128 - INFO - products_with_images.csv file read successfully with 94 rows
+2025-12-06 17:06:51,131 - WARNING - Rejected 4 rows: Missing required values
+2025-12-06 17:06:51,131 - WARNING - Rejected 1 rows: Negative prices
+2025-12-06 17:06:51,149 - INFO - Reading stores.csv file
+2025-12-06 17:06:51,150 - INFO - stores.csv file read successfully with 75 rows
+2025-12-06 17:10:36,293 - INFO - Opening schema.sql file
+2025-12-06 17:10:36,295 - INFO - Schema.sql file opened successfully
+2025-12-06 17:10:36,300 - INFO - Reading category.csv file
+2025-12-06 17:10:36,301 - INFO - Category.csv file read successfully with 10 rows
+2025-12-06 17:10:36,304 - INFO - Reading products_with_images.csv file
+2025-12-06 17:10:36,304 - INFO - products_with_images.csv file read successfully with 94 rows
+2025-12-06 17:10:36,307 - WARNING - Rejected 4 rows: Missing required values
+2025-12-06 17:10:36,307 - WARNING - Rejected 1 rows: Negative prices
+2025-12-06 17:10:36,324 - INFO - Reading stores.csv file
+2025-12-06 17:10:36,325 - INFO - stores.csv file read successfully with 75 rows
+2025-12-06 17:10:36,340 - INFO - Reading sales_processed.csv file
+2025-12-06 17:10:36,340 - ERROR - sales_processed.csv file not found
+2025-12-06 17:14:15,433 - INFO - Opening schema.sql file
+2025-12-06 17:14:15,436 - INFO - Schema.sql file opened successfully
+2025-12-06 17:14:15,441 - INFO - Reading category.csv file
+2025-12-06 17:14:15,442 - INFO - Category.csv file read successfully with 10 rows
+2025-12-06 17:14:15,445 - INFO - Reading products_with_images.csv file
+2025-12-06 17:14:15,446 - INFO - products_with_images.csv file read successfully with 94 rows
+2025-12-06 17:14:15,448 - WARNING - Rejected 4 rows: Missing required values
+2025-12-06 17:14:15,449 - WARNING - Rejected 1 rows: Negative prices
+2025-12-06 17:14:15,469 - INFO - Reading sales_processed.csv file
+2025-12-06 17:14:15,469 - ERROR - sales_processed.csv file not found
+2025-12-06 17:14:21,117 - INFO - Opening schema.sql file
+2025-12-06 17:14:21,119 - INFO - Schema.sql file opened successfully
+2025-12-06 17:14:21,126 - INFO - Reading category.csv file
+2025-12-06 17:14:21,127 - INFO - Category.csv file read successfully with 10 rows
+2025-12-06 17:14:21,129 - INFO - Reading products_with_images.csv file
+2025-12-06 17:14:21,130 - INFO - products_with_images.csv file read successfully with 94 rows
+2025-12-06 17:14:21,132 - WARNING - Rejected 4 rows: Missing required values
+2025-12-06 17:14:21,133 - WARNING - Rejected 1 rows: Negative prices
+2025-12-06 17:14:25,591 - INFO - Opening schema.sql file
+2025-12-06 17:14:25,593 - INFO - Schema.sql file opened successfully
+2025-12-06 17:14:25,598 - INFO - Reading category.csv file
+2025-12-06 17:14:25,599 - INFO - Category.csv file read successfully with 10 rows
+2025-12-06 17:14:25,602 - INFO - Reading products_with_images.csv file
+2025-12-06 17:14:25,603 - INFO - products_with_images.csv file read successfully with 94 rows
+2025-12-06 17:14:25,605 - WARNING - Rejected 4 rows: Missing required values
+2025-12-06 17:14:25,605 - WARNING - Rejected 1 rows: Negative prices
+2025-12-06 17:14:25,627 - INFO - Reading stores.csv file
+2025-12-06 17:14:25,628 - INFO - stores.csv file read successfully with 75 rows
+2025-12-06 17:15:18,456 - INFO - Opening schema.sql file
+2025-12-06 17:15:18,457 - INFO - Schema.sql file opened successfully
+2025-12-06 17:15:18,462 - INFO - Reading category.csv file
+2025-12-06 17:15:18,463 - INFO - Category.csv file read successfully with 10 rows
+2025-12-06 17:15:18,466 - INFO - Reading products_with_images.csv file
+2025-12-06 17:15:18,466 - INFO - products_with_images.csv file read successfully with 94 rows
+2025-12-06 17:15:18,469 - WARNING - Rejected 4 rows: Missing required values
+2025-12-06 17:15:18,469 - WARNING - Rejected 1 rows: Negative prices
+2025-12-06 17:15:18,491 - INFO - Reading stores.csv file
+2025-12-06 17:15:18,492 - INFO - stores.csv file read successfully with 75 rows
+2025-12-06 17:15:18,507 - INFO - Reading sales_processed.csv file
+2025-12-06 17:15:18,507 - ERROR - sales_processed.csv file not found
+2025-12-06 17:18:07,885 - INFO - EXRACT: Column names cleaned
+2025-12-06 17:18:07,886 - INFO - EXRACT: Data types converted
+2025-12-06 17:18:07,886 - INFO - EXRACT: Category images added
+2025-12-06 17:23:43,438 - INFO - EXRACT: Column names cleaned
+2025-12-06 17:23:43,439 - INFO - EXRACT: Data types converted
+2025-12-06 17:23:43,440 - INFO - EXRACT: Category images added
+2025-12-06 17:23:43,697 - INFO - EXRACT: Column names cleaned
+2025-12-06 17:23:44,271 - INFO - EXTRACT: Sales data types converted
+2025-12-06 17:23:44,452 - INFO - EXTRACT: Time dimensions added
+2025-12-06 17:23:45,778 - INFO - EXTRACT: Sales processed successfully
+2025-12-06 17:23:55,038 - INFO - Opening schema.sql file
+2025-12-06 17:23:55,040 - INFO - Schema.sql file opened successfully
+2025-12-06 17:23:55,044 - INFO - Reading category.csv file
+2025-12-06 17:23:55,045 - INFO - Category.csv file read successfully with 10 rows
+2025-12-06 17:23:55,048 - INFO - Reading products_with_images.csv file
+2025-12-06 17:23:55,048 - INFO - products_with_images.csv file read successfully with 94 rows
+2025-12-06 17:23:55,050 - WARNING - Rejected 4 rows: Missing required values
+2025-12-06 17:23:55,051 - WARNING - Rejected 1 rows: Negative prices
+2025-12-06 17:23:55,071 - INFO - Reading stores.csv file
+2025-12-06 17:23:55,072 - INFO - stores.csv file read successfully with 75 rows
+2025-12-06 17:23:55,087 - INFO - Reading sales_processed.csv file
+2025-12-06 17:23:55,454 - INFO - sales_processed.csv file read successfully with 1040200 rows
+2025-12-06 17:24:11,838 - INFO - Loaded 10000 of 1040200 sales records
+2025-12-06 17:24:12,726 - INFO - Loaded 20000 of 1040200 sales records
+2025-12-06 17:24:13,523 - INFO - Loaded 30000 of 1040200 sales records
+2025-12-06 17:24:14,325 - INFO - Loaded 40000 of 1040200 sales records
+2025-12-06 17:24:15,149 - INFO - Loaded 50000 of 1040200 sales records
+2025-12-06 17:24:15,948 - INFO - Loaded 60000 of 1040200 sales records
+2025-12-06 17:24:16,743 - INFO - Loaded 70000 of 1040200 sales records
+2025-12-06 17:24:17,553 - INFO - Loaded 80000 of 1040200 sales records
+2025-12-06 17:24:18,355 - INFO - Loaded 90000 of 1040200 sales records
+2025-12-06 17:24:19,155 - INFO - Loaded 100000 of 1040200 sales records
+2025-12-06 17:24:19,958 - INFO - Loaded 110000 of 1040200 sales records
+2025-12-06 17:24:20,761 - INFO - Loaded 120000 of 1040200 sales records
+2025-12-06 17:24:21,571 - INFO - Loaded 130000 of 1040200 sales records
+2025-12-06 17:24:22,388 - INFO - Loaded 140000 of 1040200 sales records
+2025-12-06 17:24:23,195 - INFO - Loaded 150000 of 1040200 sales records
+2025-12-06 17:24:24,001 - INFO - Loaded 160000 of 1040200 sales records
+2025-12-06 17:24:24,846 - INFO - Loaded 170000 of 1040200 sales records
+2025-12-06 17:24:25,716 - INFO - Loaded 180000 of 1040200 sales records
+2025-12-06 17:24:26,561 - INFO - Loaded 190000 of 1040200 sales records
+2025-12-06 17:24:27,401 - INFO - Loaded 200000 of 1040200 sales records
+2025-12-06 17:24:28,228 - INFO - Loaded 210000 of 1040200 sales records
+2025-12-06 17:24:29,066 - INFO - Loaded 220000 of 1040200 sales records
+2025-12-06 17:24:29,887 - INFO - Loaded 230000 of 1040200 sales records
+2025-12-06 17:24:30,728 - INFO - Loaded 240000 of 1040200 sales records
+2025-12-06 17:24:31,559 - INFO - Loaded 250000 of 1040200 sales records
+2025-12-06 17:24:32,389 - INFO - Loaded 260000 of 1040200 sales records
+2025-12-06 17:24:33,216 - INFO - Loaded 270000 of 1040200 sales records
+2025-12-06 17:24:34,057 - INFO - Loaded 280000 of 1040200 sales records
+2025-12-06 17:24:35,008 - INFO - Loaded 290000 of 1040200 sales records
+2025-12-06 17:24:35,884 - INFO - Loaded 300000 of 1040200 sales records
+2025-12-06 17:24:36,868 - INFO - Loaded 310000 of 1040200 sales records
+2025-12-06 17:24:37,720 - INFO - Loaded 320000 of 1040200 sales records
+2025-12-06 17:24:38,587 - INFO - Loaded 330000 of 1040200 sales records
+2025-12-06 17:24:39,420 - INFO - Loaded 340000 of 1040200 sales records
+2025-12-06 17:24:40,276 - INFO - Loaded 350000 of 1040200 sales records
+2025-12-06 17:24:41,105 - INFO - Loaded 360000 of 1040200 sales records
+2025-12-06 17:24:41,940 - INFO - Loaded 370000 of 1040200 sales records
+2025-12-06 17:24:42,776 - INFO - Loaded 380000 of 1040200 sales records
+2025-12-06 17:24:43,606 - INFO - Loaded 390000 of 1040200 sales records
+2025-12-06 17:24:44,437 - INFO - Loaded 400000 of 1040200 sales records
+2025-12-06 17:24:45,268 - INFO - Loaded 410000 of 1040200 sales records
+2025-12-06 17:24:46,099 - INFO - Loaded 420000 of 1040200 sales records
+2025-12-06 17:24:46,937 - INFO - Loaded 430000 of 1040200 sales records
+2025-12-06 17:24:47,793 - INFO - Loaded 440000 of 1040200 sales records
+2025-12-06 17:24:48,623 - INFO - Loaded 450000 of 1040200 sales records
+2025-12-06 17:24:49,456 - INFO - Loaded 460000 of 1040200 sales records
+2025-12-06 17:24:50,286 - INFO - Loaded 470000 of 1040200 sales records
+2025-12-06 17:24:51,122 - INFO - Loaded 480000 of 1040200 sales records
+2025-12-06 17:24:51,958 - INFO - Loaded 490000 of 1040200 sales records
+2025-12-06 17:24:52,803 - INFO - Loaded 500000 of 1040200 sales records
+2025-12-06 17:24:53,652 - INFO - Loaded 510000 of 1040200 sales records
+2025-12-06 17:24:54,491 - INFO - Loaded 520000 of 1040200 sales records
+2025-12-06 17:24:55,327 - INFO - Loaded 530000 of 1040200 sales records
+2025-12-06 17:24:56,166 - INFO - Loaded 540000 of 1040200 sales records
+2025-12-06 17:24:57,010 - INFO - Loaded 550000 of 1040200 sales records
+2025-12-06 17:24:57,848 - INFO - Loaded 560000 of 1040200 sales records
+2025-12-06 17:24:58,719 - INFO - Loaded 570000 of 1040200 sales records
+2025-12-06 17:24:59,615 - INFO - Loaded 580000 of 1040200 sales records
+2025-12-06 17:25:00,452 - INFO - Loaded 590000 of 1040200 sales records
+2025-12-06 17:25:01,289 - INFO - Loaded 600000 of 1040200 sales records
+2025-12-06 17:25:02,136 - INFO - Loaded 610000 of 1040200 sales records
+2025-12-06 17:25:02,967 - INFO - Loaded 620000 of 1040200 sales records
+2025-12-06 17:25:03,834 - INFO - Loaded 630000 of 1040200 sales records
+2025-12-06 17:25:04,674 - INFO - Loaded 640000 of 1040200 sales records
+2025-12-06 17:25:05,512 - INFO - Loaded 650000 of 1040200 sales records
+2025-12-06 17:25:06,347 - INFO - Loaded 660000 of 1040200 sales records
+2025-12-06 17:25:07,185 - INFO - Loaded 670000 of 1040200 sales records
+2025-12-06 17:25:08,014 - INFO - Loaded 680000 of 1040200 sales records
+2025-12-06 17:25:08,846 - INFO - Loaded 690000 of 1040200 sales records
+2025-12-06 17:25:09,687 - INFO - Loaded 700000 of 1040200 sales records
+2025-12-06 17:25:10,523 - INFO - Loaded 710000 of 1040200 sales records
+2025-12-06 17:25:11,359 - INFO - Loaded 720000 of 1040200 sales records
+2025-12-06 17:25:12,221 - INFO - Loaded 730000 of 1040200 sales records
+2025-12-06 17:25:13,067 - INFO - Loaded 740000 of 1040200 sales records
+2025-12-06 17:25:13,903 - INFO - Loaded 750000 of 1040200 sales records
+2025-12-06 17:25:14,745 - INFO - Loaded 760000 of 1040200 sales records
+2025-12-06 17:25:15,590 - INFO - Loaded 770000 of 1040200 sales records
+2025-12-06 17:25:16,430 - INFO - Loaded 780000 of 1040200 sales records
+2025-12-06 17:25:17,280 - INFO - Loaded 790000 of 1040200 sales records
+2025-12-06 17:25:18,122 - INFO - Loaded 800000 of 1040200 sales records
+2025-12-06 17:25:18,967 - INFO - Loaded 810000 of 1040200 sales records
+2025-12-06 17:25:19,806 - INFO - Loaded 820000 of 1040200 sales records
+2025-12-06 17:25:20,649 - INFO - Loaded 830000 of 1040200 sales records
+2025-12-06 17:25:21,497 - INFO - Loaded 840000 of 1040200 sales records
+2025-12-06 17:25:22,345 - INFO - Loaded 850000 of 1040200 sales records
+2025-12-06 17:25:23,184 - INFO - Loaded 860000 of 1040200 sales records
+2025-12-06 17:25:24,018 - INFO - Loaded 870000 of 1040200 sales records
+2025-12-06 17:25:24,855 - INFO - Loaded 880000 of 1040200 sales records
+2025-12-06 17:25:25,699 - INFO - Loaded 890000 of 1040200 sales records
+2025-12-06 17:25:26,543 - INFO - Loaded 900000 of 1040200 sales records
+2025-12-06 17:25:27,391 - INFO - Loaded 910000 of 1040200 sales records
+2025-12-06 17:25:28,233 - INFO - Loaded 920000 of 1040200 sales records
+2025-12-06 17:25:29,075 - INFO - Loaded 930000 of 1040200 sales records
+2025-12-06 17:25:29,915 - INFO - Loaded 940000 of 1040200 sales records
+2025-12-06 17:25:30,757 - INFO - Loaded 950000 of 1040200 sales records
+2025-12-06 17:25:31,604 - INFO - Loaded 960000 of 1040200 sales records
+2025-12-06 17:25:32,454 - INFO - Loaded 970000 of 1040200 sales records
+2025-12-06 17:25:33,293 - INFO - Loaded 980000 of 1040200 sales records
+2025-12-06 17:25:34,142 - INFO - Loaded 990000 of 1040200 sales records
+2025-12-06 17:25:34,981 - INFO - Loaded 1000000 of 1040200 sales records
+2025-12-06 17:25:35,835 - INFO - Loaded 1010000 of 1040200 sales records
+2025-12-06 17:25:36,677 - INFO - Loaded 1020000 of 1040200 sales records
+2025-12-06 17:25:37,523 - INFO - Loaded 1030000 of 1040200 sales records
+2025-12-06 17:25:38,363 - INFO - Loaded 1040000 of 1040200 sales records
