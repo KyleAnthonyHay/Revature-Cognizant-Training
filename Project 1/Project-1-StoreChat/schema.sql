@@ -45,10 +45,27 @@ CREATE TABLE IF NOT EXISTS sales (
     FOREIGN KEY (product_id) REFERENCES products(product_id)
 );
 
+--------------------------------STORE SALES SUMMARY TABLE------------------------------
+CREATE TABLE IF NOT EXISTS store_sales_summary (
+    summary_id SERIAL PRIMARY KEY,
+    store_id VARCHAR(255) NOT NULL,
+    sale_year INT NOT NULL,
+    sale_month INT NOT NULL CHECK (sale_month BETWEEN 1 AND 12),
+    total_quantity INT NOT NULL,
+    total_transactions INT NOT NULL,
+    avg_quantity_per_transaction DECIMAL(10,2) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (store_id) REFERENCES stores(store_id),
+    UNIQUE (store_id, sale_year, sale_month)
+);
+
 --------------------------------INDECES------------------------------
 CREATE INDEX IF NOT EXISTS idx_sales_date ON sales(sale_date);
 CREATE INDEX IF NOT EXISTS idx_sales_store ON sales(store_id);
 CREATE INDEX IF NOT EXISTS idx_sales_product ON sales(product_id);
 CREATE INDEX IF NOT EXISTS idx_sales_year_month ON sales(sale_year, sale_month);
+CREATE INDEX IF NOT EXISTS idx_store_sales_store ON store_sales_summary(store_id);
+CREATE INDEX IF NOT EXISTS idx_store_sales_year_month ON store_sales_summary(sale_year, sale_month);
 -- CREATE INDEX IF NOT EXISTS idx_products_category ON products (category_id);
 -- CREATE INDEX IF NOT EXISTS idx_products_launch_date ON products (launch_date);

@@ -120,6 +120,47 @@ def process_sales(input_file, output_file):
     logger.log_info("EXTRACT: Sales processed successfully")
     return df, validation_results
 
+#--------------------------------EXTRACT STORE SALES SUMMARY------------------------------
+def aggregate_store_sales(sales_df):
+    """Aggregate sales data by store, year, and month for graphing"""
+    summary_df = sales_df.groupby(['store_id', 'sale_year', 'sale_month']).agg(
+        total_quantity=('quantity', 'sum'),
+        total_transactions=('sale_id', 'count')
+    ).reset_index()
+    
+    summary_df['avg_quantity_per_transaction'] = (
+        summary_df['total_quantity'] / summary_df['total_transactions']
+    ).round(2)
+    
+    logger.log_info(f"EXTRACT: Aggregated {len(summary_df)} store sales summary records")
+    return summary_df
+
+def validate_store_sales_summary(df):
+    validation_results = {
+        'missing_store_id': df['store_id'].isna().sum(),
+        'missing_sale_year': df['sale_year'].isna().sum(),
+        'missing_sale_month': df['sale_month'].isna().sum(),
+        'zero_or_negative_quantity': (df['total_quantity'] <= 0).sum(),
+        'zero_transactions': (df['total_transactions'] <= 0).sum(),
+    }
+    return validation_results
+
+def process_store_sales_summary(sales_input_file, output_file):
+    """Process sales data into store sales summary for graphing"""
+    df = pd.read_csv(sales_input_file)
+    df = clean_column_names(df)
+    
+    if 'sale_year' not in df.columns:
+        df = convert_sales_data_types(df)
+        df = add_time_dimensions(df)
+    
+    summary_df = aggregate_store_sales(df)
+    validation_results = validate_store_sales_summary(summary_df)
+    
+    summary_df.to_csv(output_file, index=False)
+    logger.log_info("EXTRACT: Store sales summary processed successfully")
+    return summary_df, validation_results
+
 if __name__ == "__main__": # pragma: no cover
     #--------------------------------Process PRODUCTS.CSV------------------------------
     df = pd.read_csv("../dataset/products.csv")
@@ -154,3 +195,16 @@ if __name__ == "__main__": # pragma: no cover
         print(f"{key.replace('_', ' ').title()}: {value}")
     
     print(f"\nProcessed {len(sales_df)} sales records")
+        
+    #--------------------------------Process STORE SALES SUMMARY------------------------------
+    print("\n\n---------------Processing Store Sales Summary-----------------")
+    summary_df, summary_validation = process_store_sales_summary(
+        "../dataset/sales_processed.csv",
+        "../dataset/store_sales_summary.csv"
+    )
+    
+    print("\n---------------Store Sales Summary Validation Checks-----------------")
+    for key, value in summary_validation.items():
+        print(f"{key.replace('_', ' ').title()}: {value}")
+    
+    print(f"\nGenerated {len(summary_df)} store sales summary records")

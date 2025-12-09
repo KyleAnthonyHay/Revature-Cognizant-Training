@@ -127,6 +127,56 @@ def load_sales():
         conn.commit()
         print(f"Loaded {len(sales_df)} sales")
 
+def load_store_sales_summary():
+    """Load store sales summary data from CSV file into the database"""
+    with get_conn() as conn, conn.cursor() as cur:
+        try:
+            logger.log_info("Reading store_sales_summary.csv file")
+            summary_df = pd.read_csv("../dataset/store_sales_summary.csv")
+            logger.log_info(f"store_sales_summary.csv file read successfully with {len(summary_df)} rows")
+        except FileNotFoundError:
+            logger.log_error("store_sales_summary.csv file not found")
+            raise
+        except Exception as e:
+            logger.log_error(f"Error reading store_sales_summary.csv file: {e}")
+            raise
+        
+        summary_df, rejected_df = validateService.clean_dataframe(summary_df, False)
+        
+        if len(rejected_df) > 0:
+            for _, row in rejected_df.iterrows():
+                reason = row.get('rejection_reason', 'Validation failed')
+                row_data = row.drop('rejection_reason').to_dict() if 'rejection_reason' in row else row.to_dict()
+                cur.execute(
+                    "INSERT INTO rejected_fields (source_table, rejection_reason, rejected_data) VALUES (%s, %s, %s)",
+                    ("store_sales_summary", reason, pd.Series(row_data).to_json())
+                )
+        logger.log_info(f"Rejected {len(rejected_df)} rows from store_sales_summary.csv file")
+        
+        for _, row in summary_df.iterrows():
+            try:
+                cur.execute("""
+                    INSERT INTO store_sales_summary (
+                        store_id, sale_year, sale_month, total_quantity, 
+                        total_transactions, avg_quantity_per_transaction
+                    ) VALUES (%s, %s, %s, %s, %s, %s)
+                    ON CONFLICT (store_id, sale_year, sale_month) DO UPDATE SET
+                        total_quantity = EXCLUDED.total_quantity,
+                        total_transactions = EXCLUDED.total_transactions,
+                        avg_quantity_per_transaction = EXCLUDED.avg_quantity_per_transaction
+                """, (
+                    row['store_id'], int(row['sale_year']), int(row['sale_month']),
+                    int(row['total_quantity']), int(row['total_transactions']),
+                    float(row['avg_quantity_per_transaction'])
+                ))
+            except Exception as e:
+                logger.log_error(f"Error inserting store sales summary for {row['store_id']}: {e}")
+                continue
+        
+        conn.commit()
+        logger.log_info(f"Loaded {len(summary_df)} store sales summary records")
+        print(f"Loaded {len(summary_df)} store sales summary records")
+
 def load_data():
     """ Load data from CSV files into the database """
     with get_conn() as conn, conn.cursor() as cur: # # TODO : add try catch
@@ -194,3 +244,4 @@ def load_data():
         print(f"Loaded {len(category_df)} categories and {len(product_df)} products")
         load_stores()
         load_sales()
+        load_store_sales_summary()

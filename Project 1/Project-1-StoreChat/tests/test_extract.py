@@ -11,7 +11,10 @@ from src.extract import (
     add_time_dimensions,
     validate_sales_data,
     deduplicate_sales,
-    process_sales
+    process_sales,
+    process_store_sales_summary,
+    aggregate_store_sales,
+    validate_store_sales_summary
 )
 #--------------------------------Fixtures--------------------------------
 @pytest.fixture
@@ -122,4 +125,54 @@ def test_process_sales(tmp_path, sample_sales_df):
     assert os.path.exists(output_file)
     assert 'sale_year' in df.columns
     assert 'sale_month' in df.columns
+    assert isinstance(validation_results, dict)
+
+#--------------------------------Tests for Store Sales Summary--------------------------------
+@pytest.fixture
+def sample_processed_sales_df():
+    return pd.DataFrame({
+        'sale_id': ['S1', 'S2', 'S3', 'S4'],
+        'sale_date': ['2023-06-16', '2023-06-17', '2023-07-01', '2023-06-16'],
+        'store_id': ['ST-10', 'ST-10', 'ST-10', 'ST-20'],
+        'product_id': ['P-38', 'P-48', 'P-79', 'P-24'],
+        'quantity': [10, 5, 7, 3],
+        'sale_year': [2023, 2023, 2023, 2023],
+        'sale_month': [6, 6, 7, 6],
+        'sale_quarter': [2, 2, 3, 2],
+        'sale_day_of_week': ['Friday', 'Saturday', 'Saturday', 'Friday'],
+        'sale_week': [24, 24, 26, 24]
+    })
+
+def test_aggregate_store_sales(sample_processed_sales_df):
+    result = aggregate_store_sales(sample_processed_sales_df)
+    assert 'store_id' in result.columns
+    assert 'sale_year' in result.columns
+    assert 'sale_month' in result.columns
+    assert 'total_quantity' in result.columns
+    assert 'total_transactions' in result.columns
+    assert 'avg_quantity_per_transaction' in result.columns
+    
+    st10_june = result[(result['store_id'] == 'ST-10') & (result['sale_month'] == 6)]
+    assert len(st10_june) == 1
+    assert st10_june.iloc[0]['total_quantity'] == 15
+    assert st10_june.iloc[0]['total_transactions'] == 2
+
+def test_validate_store_sales_summary(sample_processed_sales_df):
+    summary_df = aggregate_store_sales(sample_processed_sales_df)
+    results = validate_store_sales_summary(summary_df)
+    assert isinstance(results, dict)
+    assert 'missing_store_id' in results
+    assert 'zero_or_negative_quantity' in results
+    assert results['missing_store_id'] == 0
+
+def test_process_store_sales_summary(tmp_path, sample_processed_sales_df):
+    input_file = tmp_path / "test_sales_input.csv"
+    output_file = tmp_path / "test_summary_output.csv"
+    
+    sample_processed_sales_df.to_csv(input_file, index=False)
+    df, validation_results = process_store_sales_summary(input_file, output_file)
+    
+    assert os.path.exists(output_file)
+    assert 'total_quantity' in df.columns
+    assert 'avg_quantity_per_transaction' in df.columns
     assert isinstance(validation_results, dict)
