@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS products (
     category_id VARCHAR(255) NOT NULL,
     launch_date DATE NOT NULL,
     price DECIMAL(10,2) NOT NULL,
-    image_url VARCHAR(255) NOT NULL
+    image_url VARCHAR(255) NOT NULL,
+    FOREIGN KEY (category_id) REFERENCES categories(category_id)
 );
 
 CREATE TABLE IF NOT EXISTS rejected_fields ( 
@@ -67,5 +68,5 @@ CREATE INDEX IF NOT EXISTS idx_sales_product ON sales(product_id);
 CREATE INDEX IF NOT EXISTS idx_sales_year_month ON sales(sale_year, sale_month);
 CREATE INDEX IF NOT EXISTS idx_store_sales_store ON store_sales_summary(store_id);
 CREATE INDEX IF NOT EXISTS idx_store_sales_year_month ON store_sales_summary(sale_year, sale_month);
--- CREATE INDEX IF NOT EXISTS idx_products_category ON products (category_id);
+CREATE INDEX IF NOT EXISTS idx_products_category ON products (category_id);
 -- CREATE INDEX IF NOT EXISTS idx_products_launch_date ON products (launch_date);
