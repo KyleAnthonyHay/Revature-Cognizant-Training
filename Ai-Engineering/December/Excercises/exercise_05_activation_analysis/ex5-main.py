@@ -65,6 +65,7 @@ def tanh_derivative(z):
 def relu_derivative(z):
     """Derivative of ReLU."""
     # TODO: 1 if z > 0, else 0
+    z = np.asarray(z)
     return (z > 0).astype(float)
 
 
@@ -144,7 +145,25 @@ if __name__ == "__main__":
     print("\n--- OUTPUT RANGES ---")
     # TODO: Fill in the table
     # | Activation | Min Output | Max Output | Zero-Centered? |
-    
+    print(f"{'Activation':<15} {'Min Output':<12} {'Max Output':<12} {'Zero-Centered?':<15}")
+    print("-" * 60)
+
+    # Verify by computing actual min/max values
+    activations_list = [
+        ('Step', step),
+        ('Sigmoid', sigmoid),
+        ('Tanh', tanh_activation),
+        ('ReLU', relu),
+        ('Leaky ReLU', leaky_relu)
+    ]
+
+    for name, activation_func in activations_list:
+        outputs = activation_func(z)
+        min_val = outputs.min()
+        max_val = outputs.max()
+        zero_centered = "Yes" if min_val < 0 else "No"
+        print(f"{name:<15} {min_val:<12.4f} {max_val:<12.4f} {zero_centered:<15}")
+        
     # =============================================================================
     # EXPERIMENT B: GRADIENT VALUES
     # =============================================================================
@@ -153,13 +172,39 @@ if __name__ == "__main__":
     test_points = [-3, -1, 0, 1, 3]
     
     # TODO: Calculate gradient values at test points
-    
+    print(f"{'z':<8} {'Sigmoid':<15} {'Tanh':<15} {'ReLU':<15} {'Leaky ReLU':<15}")
+    print("-" * 70)
+
+    for z_val in test_points:
+        sig_grad = sigmoid_derivative(z_val)
+        tanh_grad = tanh_derivative(z_val)
+        relu_grad = relu_derivative(z_val)
+        leaky_grad = leaky_relu_derivative(z_val)
+    print(f"{z_val:<8} {sig_grad:<15.6f} {tanh_grad:<15.6f} {relu_grad:<15.6f} {leaky_grad:<15.6f}")
     # =============================================================================
     # EXPERIMENT C: VANISHING GRADIENT
     # =============================================================================
     
     print("\n--- VANISHING GRADIENT ---")
     # TODO: What is sigmoid gradient at z = 10? z = -10?
+    """
+    Vanishing Gradient Problem:
+    Gradients become extremely small (near zero) at extreme input values.
+    When gradients are tiny, weight updates during backpropagation are negligible.
+    This causes early layers in deep networks to learn very slowly or stop learning.
+    Common with sigmoid and tanh activations.
+    """
+    z_extreme_positive = 10
+    z_extreme_negative = -10
+
+    sig_grad_pos = sigmoid_derivative(z_extreme_positive)
+    sig_grad_neg = sigmoid_derivative(z_extreme_negative)
+
+    print(f"Sigmoid gradient at z = {z_extreme_positive}: {sig_grad_pos:.8f}")
+    print(f"Sigmoid gradient at z = {z_extreme_negative}: {sig_grad_neg:.8f}")
+    print(f"\nObservation: At extreme values, gradients are nearly zero.")
+    print(f"This causes 'vanishing gradients' - weights barely update during backpropagation.")
+
     
     # =============================================================================
     # EXPERIMENT D: DEAD RELU
@@ -167,3 +212,17 @@ if __name__ == "__main__":
     
     print("\n--- DEAD RELU ---")
     # TODO: Explain the dying ReLU problem
+    """
+    1. ReLU's gradient when z < 0: 0 (zero gradient)
+
+    2. Dying ReLU problem:
+    When z < 0, ReLU outputs 0 and has gradient 0.
+    If weights cause z to stay negative, the neuron outputs 0 forever.
+    With gradient = 0, weights don't update, so the neuron stays "dead".
+    This reduces network capacity and learning ability.
+
+    3. Leaky ReLU solution:
+    Uses a small positive gradient (alpha, typically 0.01) for z < 0.
+    This allows weights to update even when z is negative.
+    Prevents neurons from dying completely.
+    """
