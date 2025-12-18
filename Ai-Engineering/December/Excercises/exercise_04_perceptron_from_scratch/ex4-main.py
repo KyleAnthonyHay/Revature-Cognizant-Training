@@ -1,3 +1,31 @@
+"""
+Exercise 04: Perceptron from Scratch
+=====================================
+
+SETUP INSTRUCTIONS:
+-------------------
+1. Create a virtual environment:
+   python3 -m venv venv
+
+2. Activate the virtual environment:
+   - On macOS/Linux: source venv/bin/activate
+   - On Windows: venv\\Scripts\\activate
+
+3. Install required packages:
+   pip install -r requirements.txt
+
+4. Run the program:
+   python3 Ex4-main.py
+
+5. Decision boundary graphs will display for AND, OR, and XOR gates.
+
+This exercise demonstrates:
+- Building a perceptron from scratch
+- Training on logic gates (AND, OR, XOR)
+- Visualizing decision boundaries
+- Understanding linear separability limitations
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -197,13 +225,39 @@ if __name__ == "__main__":
     print(f"Predictions: {predictions_or}")
     print(f"Actual: {y_or}")
     print(f"Accuracy: {(predictions_or == y_or).mean():.2%}")
-    
+
     #  TODO: NEXT
     #===============================================
     # Task 3.1: XOR gate data 
     #===============================================
+    X_xor = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+    y_xor = np.array([0, 1, 1, 0])
+    # Train perceptron on XOR
+    perceptron_xor = Perceptron(n_features=2, learning_rate=0.1)
+    perceptron_xor, history_xor = perceptron_xor.fit(X_xor, y_xor, epochs=1000)
+
+    predictions_xor = perceptron_xor.predict(X_xor)
+    print("================================================")
+    print("XOR Gate Results:")
+    print(f"Predictions: {predictions_xor}")
+    print(f"Actual: {y_xor}")
+    print(f"Accuracy: {(predictions_xor == y_xor).mean():.2%}")
 
 
     # TODO: Call for decision boundary plot for AND and OR gates
     perceptron.plot_decision_boundary(X_and, y_and, 'AND Gate: Perceptron Decision Boundary')
     perceptron_or.plot_decision_boundary(X_or, y_or, 'OR Gate: Perceptron Decision Boundary')
+    # Call for decision boundary plot for XOR gate
+    predictions_xor = perceptron_xor.predict(X_xor)
+
+#===============================================
+# Reflection Questions
+#===============================================
+# Q1: Did the perceptron converge for XOR? What was the final accuracy?
+# Answer: No, the perceptron did not converge — it stayed at 4 errors for all 1000 epochs. The accuracy was essentially random but functionally ~50%.
+
+# Q2: Why can't a single perceptron learn XOR? (Hint: linear separability)
+# Answer: a single-layer perceptron cannot solve XOR because it's not linearly separable. XOR creates a form a diagonal pattern that no single line can divide.
+
+# Q3: What would you need to solve XOR? (Preview of multi-layer networks)
+# Answer: A multi-layer perceptron (MLP) with at least 1 hidden layer.
