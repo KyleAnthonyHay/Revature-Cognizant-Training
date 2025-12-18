@@ -2,7 +2,22 @@
 Exercise 05: Activation Function Analysis
 =========================================
 
-Implement and analyze activation functions.
+SETUP INSTRUCTIONS:
+-------------------
+1. Create a virtual environment:
+   python3 -m venv venv
+
+2. Activate the virtual environment:
+   - On macOS/Linux: source venv/bin/activate
+   - On Windows: venv\\Scripts\\activate
+
+3. Install required packages:
+   pip install -r requirements.txt
+
+4. Run the program:
+   python3 ex5-main.py
+
+5. Activation function plots and analysis will display.
 """
 
 import numpy as np
