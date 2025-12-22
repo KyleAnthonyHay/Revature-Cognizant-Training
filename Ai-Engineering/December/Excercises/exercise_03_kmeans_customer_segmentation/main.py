@@ -104,47 +104,52 @@ plt.grid(True)
 plt.savefig('customer_segments.png')
 plt.show()
 
-"""
-=============================================
-APPROPRIATE K SELECTION WITH JUSTIFICATION:
-=============================================
-We chose K=5 because after observing the graph, the number of clusters is not increasing significantly after K=5.
+print("\n" + "=" * 50)
+print("APPROPRIATE K SELECTION WITH JUSTIFICATION:")
+print("=" * 50)
+print("We chose K=5 because after observing the graph, the number of clusters is not increasing significantly after K=5.")
 
-==================================
-BUSINESS-RELEVANT RECOMMENDATIONS:
-==================================
-Cluster 1: High Spenders (High income ~$87k, High spending ~82.1) 
-- Channel: VIP email, exclusive events
-- Offer: Premium products, early access, loyalty rewards
+print("\n" + "=" * 50)
+print("BUSINESS-RELEVANT RECOMMENDATIONS:")
+print("=" * 50)
+for i in range(K):
+    cluster_members = customers[clusters == i]
+    avg_income = cluster_members[:, 0].mean()
+    avg_spending = cluster_members[:, 1].mean()
+    segment_name = segment_names[i]
+    
+    if i == 1:
+        print(f"\nCluster {i}: {segment_name} (High income ~${avg_income:,.0f}k, High spending ~{avg_spending:.1f})")
+        print("- Channel: VIP email, exclusive events")
+        print("- Offer: Premium products, early access, loyalty rewards")
+    elif i == 2:
+        print(f"\nCluster {i}: {segment_name} (Low income ~${avg_income:,.0f}k, High spending ~{avg_spending:.1f})")
+        print("- Channel: Social media (Instagram/TikTok), mobile push")
+        print("- Offer: Flash sales, limited-time deals, payment plans")
+    elif i == 4:
+        print(f"\nCluster {i}: {segment_name} (Low income ~${avg_income:,.0f}k, Low spending ~{avg_spending:.1f})")
+        print("- Channel: Email, SMS for sales")
+        print("- Offer: Deep discounts, clearance, budget products")
 
-Cluster 2: Irresponsible Spenders (Low income ~$26k, High spending ~79.4)
-- Channel: Social media (Instagram/TikTok), mobile push
-- Offer: Flash sales, limited-time deals, payment plans
-
-Cluster 4: Low Income Customers (Low income ~$26k, Low spending ~20.9)
-- Channel: Email, SMS for sales
-- Offer: Deep discounts, clearance, budget products
-
-==================================
-MEANINGFUL CLUSTER INTERPRETATION:
-==================================
-Cluster 0: Moderate Spenders
-- Characteristics: Moderate income (~$55k), moderate spending (~49.5)
-- Real-world meaning: These customers are moderate spenders and are likely to spend a decent amount of money.
-
-Cluster 1: High Spenders
-- Characteristics: High income (~$87K), high spending (~82.1)
-- Real-world meaning: These customers are high spenders and are likely to spend a lot of money.
-
-Cluster 2: Irresponsible Spenders
-- Characteristics: Low income (~$26k), high spending (~79.4)
-- Real-world meaning: These customers are irresponsible spenders and are likely to spend a lot of money.
-
-Cluster 3: Saving-Focused Customers
-- Characteristics: High income (~$88k), low spending (~17.1)
-- Real-world meaning: These customers are saving-focused customers and are likely to spend a little money.
-
-Cluster 4: Low Income Customers
-- Characteristics: Low income (~$26k), low spending (~20.9)
-- Real-world meaning: These customers are low income customers and are not very likely to spend a lot of money.
-"""
+print("\n" + "=" * 50)
+print("MEANINGFUL CLUSTER INTERPRETATION:")
+print("=" * 50)
+for i in range(K):
+    cluster_members = customers[clusters == i]
+    avg_income = cluster_members[:, 0].mean()
+    avg_spending = cluster_members[:, 1].mean()
+    segment_name = segment_names[i]
+    
+    print(f"\nCluster {i}: {segment_name}")
+    print(f"- Characteristics: Income ~${avg_income:,.0f}k, Spending ~{avg_spending:.1f}")
+    
+    if i == 0:
+        print("- Real-world meaning: These customers are moderate spenders and are likely to spend a decent amount of money.")
+    elif i == 1:
+        print("- Real-world meaning: These customers are high spenders and are likely to spend a lot of money.")
+    elif i == 2:
+        print("- Real-world meaning: These customers are irresponsible spenders and are likely to spend a lot of money.")
+    elif i == 3:
+        print("- Real-world meaning: These customers are saving-focused customers and are likely to spend a little money.")
+    elif i == 4:
+        print("- Real-world meaning: These customers are low income customers and are not very likely to spend a lot of money.")
