@@ -249,15 +249,26 @@ if __name__ == "__main__":
     perceptron_or.plot_decision_boundary(X_or, y_or, 'OR Gate: Perceptron Decision Boundary')
     # Call for decision boundary plot for XOR gate
     predictions_xor = perceptron_xor.predict(X_xor)
-
-#===============================================
-# Reflection Questions
-#===============================================
-# Q1: Did the perceptron converge for XOR? What was the final accuracy?
-# Answer: No, the perceptron did not converge — it stayed at 4 errors for all 1000 epochs. The accuracy was essentially random but functionally ~50%.
-
-# Q2: Why can't a single perceptron learn XOR? (Hint: linear separability)
-# Answer: a single-layer perceptron cannot solve XOR because it's not linearly separable. XOR creates a form a diagonal pattern that no single line can divide.
-
-# Q3: What would you need to solve XOR? (Preview of multi-layer networks)
-# Answer: A multi-layer perceptron (MLP) with at least 1 hidden layer.
+    
+    #===============================================
+    # Reflection Questions
+    #===============================================
+    print("\n" + "=" * 50)
+    print("REFLECTION QUESTIONS")
+    print("=" * 50)
+    
+    final_errors = history_xor['errors'][-1] if history_xor['errors'] else 0
+    final_accuracy = (predictions_xor == y_xor).mean()
+    converged = final_errors == 0
+    
+    print("\nQ1: Did the perceptron converge for XOR? What was the final accuracy?")
+    if converged:
+        print(f"Answer: Yes, the perceptron converged with {final_errors} errors. Final accuracy: {final_accuracy:.2%}")
+    else:
+        print(f"Answer: No, the perceptron did not converge — it had {final_errors} errors in the final epoch. The accuracy was {final_accuracy:.2%} (essentially random but functionally ~50%).")
+    
+    print("\nQ2: Why can't a single perceptron learn XOR? (Hint: linear separability)")
+    print("Answer: A single-layer perceptron cannot solve XOR because it's not linearly separable. XOR creates a diagonal pattern that no single line can divide.")
+    
+    print("\nQ3: What would you need to solve XOR? (Preview of multi-layer networks)")
+    print("Answer: A multi-layer perceptron (MLP) with at least 1 hidden layer.")

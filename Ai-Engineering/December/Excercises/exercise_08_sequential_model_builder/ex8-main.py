@@ -2,6 +2,30 @@
 Exercise 08: Sequential Model Builder
 Part 1: Warmup - Model 1: Simple Binary Classifier
 Part 2: Architecture Challenges - Models 2-5
+
+HOW TO RUN THIS FILE:
+=====================
+
+1. Activate the virtual environment:
+   source ../../venv/bin/activate
+
+2. Install dependencies (if not already installed):
+   pip install -r requirements.txt
+
+3. Run the script:
+   python ex8-main.py
+   
+   OR
+   
+   python3 ex8-main.py
+
+4. Deactivate the virtual environment when done:
+   deactivate
+
+REQUIREMENTS:
+- Python 3.8+
+- TensorFlow 2.16.2
+- See requirements.txt for full list of dependencies
 """
 
 import tensorflow as tf

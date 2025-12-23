@@ -15,9 +15,9 @@ SETUP INSTRUCTIONS:
    pip install -r requirements.txt
 
 4. Run the program:
-   python3 main.py
+   python3 ex1-main.py
 
-5. Graphs will open on a new window
+5. Graphs will open on a new window and saved as training_loss.png, final_fit.png, weight_evolution.png, and bias_evolution.png
 
 Complete implementation of gradient descent for linear regression.
 """
@@ -176,22 +176,26 @@ if __name__ == "__main__":
     print(f"Your Model:    w = {w_final:.4f}, b = {b_final:.4f}")
     print(f"sklearn Model: w = {sklearn_model.coef_[0]:.4f}, b = {sklearn_model.intercept_:.4f}")
     print(f"True Values:   w = 2.5000, b = 7.0000")
-
-# =============================================================================
-# REFLECTION ANSWERS
-# =============================================================================
     
-# Q1: What happens with learning_rate = 0.1? learning_rate = 1.0?
-    # Answer(0.1) : the training is faster but the model will likely overcorrect in an attempt to find the optimal value.
-    # Answer(1.0) : the minimal loss returned from the training would increase because overshooting is even more extreme in this case.
-
-# Q2: What happens with learning_rate = 0.0001?
-    # Answer: The training would be much slower. It would also be less accurate due to the small step size. 100 epochs would not provide enough iterations to converge to the optimal value.
-
-# Q3: Why small random initialization instead of zeros?
-#  Answer: Because Linear Regression does not require randomization due to the linear slope zeros would work fine. However, its good practive to use small values for neural netowrks to avoid symmetry problems.
-
-# Q4: How close did you get to true values (w=2.5, b=7)?
-# Answer: Very close:
-# w: 2.4751 vs 2.5 (off by ~0.025)
-# b: 7.3094 vs 7 (off by ~0.31)
+    # =============================================================================
+    # REFLECTION ANSWERS
+    # =============================================================================
+    
+    print("\n" + "=" * 50)
+    print("REFLECTION ANSWERS")
+    print("=" * 50)
+    
+    print("\nQ1: What happens with learning_rate = 0.1? learning_rate = 1.0?")
+    print("Answer(0.1): The training is faster but the model will likely overcorrect in an attempt to find the optimal value.")
+    print("Answer(1.0): The minimal loss returned from the training would increase because overshooting is even more extreme in this case.")
+    
+    print("\nQ2: What happens with learning_rate = 0.0001?")
+    print("Answer: The training would be much slower. It would also be less accurate due to the small step size. 100 epochs would not provide enough iterations to converge to the optimal value.")
+    
+    print("\nQ3: Why small random initialization instead of zeros?")
+    print("Answer: Because Linear Regression does not require randomization due to the linear slope zeros would work fine. However, its good practice to use small values for neural networks to avoid symmetry problems.")
+    
+    print("\nQ4: How close did you get to true values (w=2.5, b=7)?")
+    print("Answer: Very close:")
+    print(f"w: {w_final:.4f} vs 2.5 (off by ~{abs(w_final - 2.5):.4f})")
+    print(f"b: {b_final:.4f} vs 7 (off by ~{abs(b_final - 7):.4f})")

@@ -12,7 +12,7 @@ HOW TO RUN:
    pip install numpy matplotlib tensorflow
 
 2. Run the script:
-   python ex10-main.py
+   python3 ex10-main.py
 
 NOTE: Multiple matplotlib windows will open. Close each window to proceed
       to the next visualization, or run in a non-interactive environment.

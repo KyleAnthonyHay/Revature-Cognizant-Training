@@ -195,20 +195,12 @@ if __name__ == "__main__":
         tanh_grad = tanh_derivative(z_val)
         relu_grad = relu_derivative(z_val)
         leaky_grad = leaky_relu_derivative(z_val)
-    print(f"{z_val:<8} {sig_grad:<15.6f} {tanh_grad:<15.6f} {relu_grad:<15.6f} {leaky_grad:<15.6f}")
+        print(f"{z_val:<8} {sig_grad:<15.6f} {tanh_grad:<15.6f} {relu_grad:<15.6f} {leaky_grad:<15.6f}")
     # =============================================================================
     # EXPERIMENT C: VANISHING GRADIENT
     # =============================================================================
     
     print("\n--- VANISHING GRADIENT ---")
-    # TODO: What is sigmoid gradient at z = 10? z = -10?
-    """
-    Vanishing Gradient Problem:
-    Gradients become extremely small (near zero) at extreme input values.
-    When gradients are tiny, weight updates during backpropagation are negligible.
-    This causes early layers in deep networks to learn very slowly or stop learning.
-    Common with sigmoid and tanh activations.
-    """
     z_extreme_positive = 10
     z_extreme_negative = -10
 
@@ -219,6 +211,12 @@ if __name__ == "__main__":
     print(f"Sigmoid gradient at z = {z_extreme_negative}: {sig_grad_neg:.8f}")
     print(f"\nObservation: At extreme values, gradients are nearly zero.")
     print(f"This causes 'vanishing gradients' - weights barely update during backpropagation.")
+    
+    print("\nVanishing Gradient Problem:")
+    print("Gradients become extremely small (near zero) at extreme input values.")
+    print("When gradients are tiny, weight updates during backpropagation are negligible.")
+    print("This causes early layers in deep networks to learn very slowly or stop learning.")
+    print("Common with sigmoid and tanh activations.")
 
     
     # =============================================================================
@@ -226,18 +224,15 @@ if __name__ == "__main__":
     # =============================================================================
     
     print("\n--- DEAD RELU ---")
-    # TODO: Explain the dying ReLU problem
-    """
-    1. ReLU's gradient when z < 0: 0 (zero gradient)
-
-    2. Dying ReLU problem:
-    When z < 0, ReLU outputs 0 and has gradient 0.
-    If weights cause z to stay negative, the neuron outputs 0 forever.
-    With gradient = 0, weights don't update, so the neuron stays "dead".
-    This reduces network capacity and learning ability.
-
-    3. Leaky ReLU solution:
-    Uses a small positive gradient (alpha, typically 0.01) for z < 0.
-    This allows weights to update even when z is negative.
-    Prevents neurons from dying completely.
-    """
+    print("1. ReLU's gradient when z < 0: 0 (zero gradient)")
+    print()
+    print("2. Dying ReLU problem:")
+    print("   When z < 0, ReLU outputs 0 and has gradient 0.")
+    print("   If weights cause z to stay negative, the neuron outputs 0 forever.")
+    print("   With gradient = 0, weights don't update, so the neuron stays \"dead\".")
+    print("   This reduces network capacity and learning ability.")
+    print()
+    print("3. Leaky ReLU solution:")
+    print("   Uses a small positive gradient (alpha, typically 0.01) for z < 0.")
+    print("   This allows weights to update even when z is negative.")
+    print("   Prevents neurons from dying completely.")
