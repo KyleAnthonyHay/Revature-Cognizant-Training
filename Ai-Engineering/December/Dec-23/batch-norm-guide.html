@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Batch Normalization - Interactive Learning Guide</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #e0e0e0;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+.container { display: flex; min-height: 100vh; }
+nav {
+  width: 280px;
+  background: rgba(0,0,0,0.3);
+  padding: 20px;
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto;
+  border-right: 1px solid rgba(79,195,247,0.2);
+}
+nav h2 { color: #4fc3f7; margin-bottom: 20px; font-size: 1.2rem; }
+nav ul { list-style: none; }
+nav li { margin: 8px 0; }
+nav a {
+  color: #aaa;
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: block;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.3s;
+}
+nav a:hover, nav a.active { background: rgba(79,195,247,0.2); color: #4fc3f7; }
+main { margin-left: 280px; padding: 40px; flex: 1; max-width: 1000px; }
+h1 { color: #4fc3f7; font-size: 2.5rem; margin-bottom: 10px; }
+h2 { color: #4fc3f7; font-size: 1.8rem; margin: 40px 0 20px; border-bottom: 2px solid rgba(79,195,247,0.3); padding-bottom: 10px; }
+h3 { color: #81d4fa; font-size: 1.3rem; margin: 25px 0 15px; }
+section { margin-bottom: 50px; }
+p { margin: 15px 0; }
+.subtitle { color: #888; font-size: 1.1rem; margin-bottom: 30px; }
+.card {
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 25px;
+  margin: 20px 0;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.eli5-box {
+  background: linear-gradient(135deg, rgba(76,175,80,0.15), rgba(76,175,80,0.05));
+  border-left: 4px solid #4caf50;
+  padding: 20px;
+  border-radius: 0 12px 12px 0;
+  margin: 20px 0;
+}
+.eli5-box h4 { color: #4caf50; margin-bottom: 10px; }
+.analogy-box {
+  background: linear-gradient(135deg, rgba(156,39,176,0.15), rgba(156,39,176,0.05));
+  border: 2px solid #9c27b0;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+}
+.analogy-box h4 { color: #ce93d8; margin-bottom: 15px; }
+.analogy-mapping { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-top: 15px; }
+.analogy-mapping p { margin: 5px 0; font-size: 0.95rem; }
+.example-box {
+  background: linear-gradient(135deg, rgba(0,188,212,0.15), rgba(0,188,212,0.05));
+  border: 2px solid #00bcd4;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+}
+.example-box h4 { color: #4dd0e1; margin-bottom: 15px; }
+.step { display: flex; align-items: flex-start; margin: 10px 0; }
+.step-num {
+  background: #00bcd4;
+  color: #000;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+.tip-box {
+  background: rgba(79,195,247,0.1);
+  border-left: 4px solid #4fc3f7;
+  padding: 15px 20px;
+  border-radius: 0 8px 8px 0;
+  margin: 15px 0;
+}
+.warning-box {
+  background: rgba(255,152,0,0.1);
+  border-left: 4px solid #ff9800;
+  padding: 15px 20px;
+  border-radius: 0 8px 8px 0;
+  margin: 15px 0;
+}
+.code-block {
+  background: #0d1117;
+  border-radius: 8px;
+  margin: 15px 0;
+  overflow: hidden;
+}
+.code-header {
+  background: #161b22;
+  padding: 10px 15px;
+  font-size: 0.85rem;
+  color: #8b949e;
+  border-bottom: 1px solid #30363d;
+}
+.code-block pre {
+  padding: 15px;
+  overflow-x: auto;
+  font-family: 'Consolas', monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.kw { color: #ff7b72; }
+.fn { color: #d2a8ff; }
+.str { color: #a5d6ff; }
+.num { color: #79c0ff; }
+.cmt { color: #8b949e; }
+.var { color: #ffa657; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  overflow: hidden;
+}
+th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+th { background: rgba(79,195,247,0.2); color: #4fc3f7; }
+.interactive-demo {
+  background: rgba(0,0,0,0.3);
+  border-radius: 12px;
+  padding: 25px;
+  margin: 25px 0;
+}
+.demo-title { color: #4fc3f7; margin-bottom: 20px; }
+.slider-group { margin: 15px 0; }
+.slider-group label { display: block; margin-bottom: 8px; color: #81d4fa; }
+.slider-group input[type="range"] { width: 100%; }
+.viz-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 20px 0;
+}
+.viz-box {
+  background: rgba(0,0,0,0.3);
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 200px;
+}
+.viz-box h5 { color: #81d4fa; margin-bottom: 10px; }
+.bar-chart { display: flex; align-items: flex-end; justify-content: center; height: 150px; gap: 8px; }
+.bar {
+  width: 30px;
+  background: linear-gradient(to top, #4fc3f7, #81d4fa);
+  border-radius: 4px 4px 0 0;
+  transition: height 0.5s;
+}
+.btn {
+  background: linear-gradient(135deg, #4fc3f7, #29b6f6);
+  color: #000;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin: 5px;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(79,195,247,0.3); }
+.btn-secondary { background: linear-gradient(135deg, #9c27b0, #7b1fa2); color: #fff; }
+.flow-diagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 25px 0;
+  padding: 20px;
+}
+.flow-box {
+  padding: 15px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-align: center;
+}
+.flow-input { background: #1976d2; }
+.flow-process { background: #f9a825; color: #000; }
+.flow-output { background: #4caf50; }
+.flow-arrow { font-size: 1.5rem; color: #4fc3f7; }
+.quiz-container { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 25px; margin: 25px 0; }
+.quiz-question { margin-bottom: 20px; }
+.quiz-question h4 { color: #81d4fa; margin-bottom: 15px; }
+.quiz-option {
+  display: block;
+  background: rgba(255,255,255,0.05);
+  padding: 12px 15px;
+  margin: 8px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 2px solid transparent;
+}
+.quiz-option:hover { background: rgba(79,195,247,0.1); border-color: #4fc3f7; }
+.quiz-option.correct { background: rgba(76,175,80,0.3); border-color: #4caf50; }
+.quiz-option.incorrect { background: rgba(244,67,54,0.3); border-color: #f44336; }
+.quiz-feedback { margin-top: 15px; padding: 15px; border-radius: 8px; display: none; }
+.comparison-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+.comparison-box { padding: 20px; border-radius: 12px; }
+.comparison-bad { background: rgba(244,67,54,0.1); border: 2px solid #f44336; }
+.comparison-good { background: rgba(76,175,80,0.1); border: 2px solid #4caf50; }
+.comparison-box h4 { margin-bottom: 15px; }
+.stat-value { font-size: 2rem; font-weight: bold; color: #4fc3f7; }
+.progress-container { margin: 20px 0; }
+.progress-bar {
+  height: 20px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4fc3f7, #4caf50);
+  border-radius: 10px;
+  transition: width 1s;
+}
+.cheatsheet {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+}
+.cheat-card {
+  background: rgba(0,0,0,0.3);
+  padding: 20px;
+  border-radius: 12px;
+  border-left: 4px solid #4fc3f7;
+}
+.cheat-card h5 { color: #4fc3f7; margin-bottom: 10px; }
+ul { margin: 10px 0 10px 20px; }
+li { margin: 8px 0; }
+@media (max-width: 900px) {
+  nav { display: none; }
+  main { margin-left: 0; padding: 20px; }
+  .comparison-container { grid-template-columns: 1fr; }
+}
+.animation-container { position: relative; height: 200px; margin: 20px 0; }
+.neuron {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.8rem;
+  transition: all 0.5s;
+}
+.layer-label {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  color: #888;
+  font-size: 0.85rem;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<nav>
+  <h2>📚 Contents</h2>
+  <ul>
+    <li><a href="#intro" class="active">Introduction</a></li>
+    <li><a href="#problem">The Problem</a></li>
+    <li><a href="#solution">The Solution</a></li>
+    <li><a href="#algorithm">The Algorithm</a></li>
+    <li><a href="#interactive">Interactive Demo</a></li>
+    <li><a href="#benefits">Benefits</a></li>
+    <li><a href="#code">Code Examples</a></li>
+    <li><a href="#parameters">Parameters</a></li>
+    <li><a href="#best-practices">Best Practices</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+    <li><a href="#summary">Summary</a></li>
+  </ul>
+</nav>
+
+<main>
+<section id="intro">
+  <h1>🧠 Batch Normalization</h1>
+  <p class="subtitle">Master one of deep learning's most important innovations</p>
+  
+  <div class="eli5-box">
+    <h4>🎈 Simple Explanation</h4>
+    <p>Batch normalization is like having a translator that keeps everyone speaking the same language in a game of telephone. Without it, the message gets more and more garbled as it passes through each person. With it, everyone stays on the same page!</p>
+  </div>
+
+  <div class="card">
+    <h3>Why This Matters</h3>
+    <ul>
+      <li>🚀 <strong>Training stability</strong>: Prevents exploding/vanishing activations</li>
+      <li>⚡ <strong>Speed</strong>: Networks train 2-10x faster</li>
+      <li>📈 <strong>Performance</strong>: Often improves final accuracy</li>
+      <li>🏗️ <strong>Architecture flexibility</strong>: Enables 50+ layer networks</li>
+      <li>🏭 <strong>Industry standard</strong>: Used in most production systems</li>
+    </ul>
+  </div>
+</section>
+
+<section id="problem">
+  <h2>🔥 The Problem: Internal Covariate Shift</h2>
+  
+  <div class="eli5-box">
+    <h4>🎈 Simple Explanation</h4>
+    <p>Imagine trying to learn to catch a ball, but every time someone throws it, they change how hard they throw. One time it's super soft, next time it's super fast. That's what each layer in a neural network experiences - the "throws" (inputs) keep changing!</p>
+  </div>
+
+  <div class="analogy-box">
+    <h4>🏠 ANALOGY: The Moving Target Classroom</h4>
+    <p>Imagine you're a student taking a test, but the teacher keeps changing the grading scale during the exam. First, 90% is an A, then suddenly 70% is an A, then 95% is an A. You'd spend all your time adjusting to the new rules instead of learning!</p>
+    <div class="analogy-mapping">
+      <p><strong>Technical → Analogy</strong></p>
+      <p>• Layer weights = Your knowledge</p>
+      <p>• Input distribution = Grading scale</p>
+      <p>• Training = Taking the test</p>
+      <p>• Covariate shift = Changing rules mid-exam</p>
+    </div>
+  </div>
+
+  <div class="example-box">
+    <h4>📝 SIMPLE EXAMPLE: Numbers Through Layers</h4>
+    <p><strong>Scenario:</strong> Data flowing through a 3-layer network</p>
+    
+    <table>
+      <tr><th>Time</th><th>Layer 1 Output</th><th>Layer 2 Sees</th><th>Problem</th></tr>
+      <tr><td>Step 1</td><td>mean=0.5, std=1.0</td><td>Nice, stable inputs!</td><td>None</td></tr>
+      <tr><td>Step 2</td><td>mean=2.3, std=3.5</td><td>Wait, everything changed!</td><td>Must readjust</td></tr>
+      <tr><td>Step 3</td><td>mean=-1.2, std=0.3</td><td>Changed again!</td><td>Can't keep up!</td></tr>
+    </table>
+    
+    <p><strong>Result:</strong> Layer 2 spends all its time adapting instead of learning the actual task.</p>
+  </div>
+
+  <h3>Consequences Without Batch Norm</h3>
+  
+  <div class="comparison-container">
+    <div class="comparison-box comparison-bad">
+      <h4>❌ Without Batch Normalization</h4>
+      <ul>
+        <li>Slow training (many more epochs)</li>
+        <li>Vanishing/exploding activations</li>
+        <li>Must use tiny learning rates</li>
+        <li>Very sensitive to initialization</li>
+        <li>Can't train deep networks (20+ layers)</li>
+      </ul>
+    </div>
+    <div class="comparison-box comparison-good">
+      <h4>✅ With Batch Normalization</h4>
+      <ul>
+        <li>2-10x faster training</li>
+        <li>Stable activations throughout</li>
+        <li>Can use 10-100x higher learning rates</li>
+        <li>More forgiving initialization</li>
+        <li>Enables 50-1000+ layer networks</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="solution">
+  <h2>💡 The Solution: Batch Normalization</h2>
+  
+  <div class="eli5-box">
+    <h4>🎈 Simple Explanation</h4>
+    <p>Batch normalization is like a quality control inspector on a factory line. After each station (layer), the inspector checks all products (activations) and adjusts them to be consistent before sending them to the next station.</p>
+  </div>
+
+  <div class="analogy-box">
+    <h4>🏠 ANALOGY: The Kitchen Temperature Controller</h4>
+    <p>Imagine you're baking in a kitchen where the oven temperature keeps fluctuating. Batch norm is like having a smart thermostat that constantly measures the temperature and adjusts it back to exactly what you need - keeping your baking consistent every time!</p>
+    <div class="analogy-mapping">
+      <p><strong>Technical → Analogy</strong></p>
+      <p>• Activations = Oven temperature</p>
+      <p>• Normalize to mean=0 = Set to target temp</p>
+      <p>• Gamma (scale) = How much variation you allow</p>
+      <p>• Beta (shift) = Your preferred base temperature</p>
+    </div>
+  </div>
+
+  <h3>Core Idea in Three Steps</h3>
+  
+  <div class="flow-diagram">
+    <div class="flow-box flow-input">📊 Batch of<br>Activations</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box flow-process">📏 Compute<br>Mean & Variance</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box flow-process">🔄 Normalize<br>(mean=0, var=1)</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box flow-process">⚙️ Scale (γ)<br>& Shift (β)</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-box flow-output">✨ Normalized<br>Output</div>
+  </div>
+
+  <div class="example-box">
+    <h4>📝 SIMPLE EXAMPLE: Normalizing Test Scores</h4>
+    <p><strong>Scenario:</strong> You have 4 students with test scores: 60, 70, 80, 90</p>
+    
+    <div class="step">
+      <span class="step-num">1</span>
+      <div><strong>Calculate Mean:</strong> (60+70+80+90) ÷ 4 = <strong>75</strong></div>
+    </div>
+    <div class="step">
+      <span class="step-num">2</span>
+      <div><strong>Calculate Variance:</strong> Average of squared differences from mean = <strong>125</strong></div>
+    </div>
+    <div class="step">
+      <span class="step-num">3</span>
+      <div><strong>Normalize:</strong> (score - 75) ÷ √125</div>
+    </div>
+    
+    <table>
+      <tr><th>Original Score</th><th>After Normalization</th></tr>
+      <tr><td>60</td><td>-1.34</td></tr>
+      <tr><td>70</td><td>-0.45</td></tr>
+      <tr><td>80</td><td>+0.45</td></tr>
+      <tr><td>90</td><td>+1.34</td></tr>
+    </table>
+    
+    <p><strong>Result:</strong> Scores now have mean=0 and consistent spread, regardless of whether the original test was easy or hard!</p>
+  </div>
+</section>
+
+<section id="algorithm">
+  <h2>📐 The Algorithm Step-by-Step</h2>
+  
+  <div class="card">
+    <h3>For a mini-batch of activations {x₁, x₂, ..., xₘ}:</h3>
+    
+    <div class="step">
+      <span class="step-num">1</span>
+      <div>
+        <strong>Compute Batch Mean</strong><br>
+        <code>μ_batch = (1/m) × Σ xᵢ</code><br>
+        <em>Add up all values, divide by count</em>
+      </div>
+    </div>
+    
+    <div class="step">
+      <span class="step-num">2</span>
+      <div>
+        <strong>Compute Batch Variance</strong><br>
+        <code>σ²_batch = (1/m) × Σ (xᵢ - μ_batch)²</code><br>
+        <em>Average of squared differences from mean</em>
+      </div>
+    </div>
+    
+    <div class="step">
+      <span class="step-num">3</span>
+      <div>
+        <strong>Normalize</strong><br>
+        <code>x̂ᵢ = (xᵢ - μ_batch) / √(σ²_batch + ε)</code><br>
+        <em>Subtract mean, divide by std dev (ε prevents division by zero)</em>
+      </div>
+    </div>
+    
+    <div class="step">
+      <span class="step-num">4</span>
+      <div>
+        <strong>Scale and Shift</strong><br>
+        <code>yᵢ = γ × x̂ᵢ + β</code><br>
+        <em>Apply learnable parameters to restore expressiveness</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="analogy-box">
+    <h4>🏠 ANALOGY: The Height Standardizer</h4>
+    <p>Imagine measuring heights of basketball players from different countries. Some use feet, some use centimeters. Batch norm converts everyone to the same scale (normalize), then lets you choose what units to display in (gamma and beta).</p>
+    <div class="analogy-mapping">
+      <p><strong>Technical → Analogy</strong></p>
+      <p>• Raw activations = Heights in mixed units</p>
+      <p>• Normalization = Convert to standard scale</p>
+      <p>• Gamma = Choose your preferred unit scale</p>
+      <p>• Beta = Set your zero point</p>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <strong>💡 Why γ and β?</strong> Without them, forcing mean=0 and variance=1 might hurt the network. These learnable parameters let the network decide "actually, I want mean=5 and variance=2 here" - or even undo the normalization entirely if needed!
+  </div>
+</section>
+
+<section id="interactive">
+  <h2>🎮 Interactive Demo</h2>
+  
+  <div class="interactive-demo">
+    <h3 class="demo-title">See Batch Normalization in Action</h3>
+    
+    <div class="slider-group">
+      <label>Batch Size: <span id="batchSizeVal">8</span></label>
+      <input type="range" id="batchSize" min="4" max="32" value="8" oninput="updateDemo()">
+    </div>
+    
+    <div class="slider-group">
+      <label>Input Variance: <span id="varianceVal">High</span></label>
+      <input type="range" id="variance" min="1" max="10" value="7" oninput="updateDemo()">
+    </div>
+    
+    <div class="viz-container">
+      <div class="viz-box">
+        <h5>Before Normalization</h5>
+        <div class="bar-chart" id="beforeChart"></div>
+        <p>Mean: <span id="beforeMean">-</span></p>
+        <p>Std: <span id="beforeStd">-</span></p>
+      </div>
+      <div class="viz-box">
+        <h5>After Normalization</h5>
+        <div class="bar-chart" id="afterChart"></div>
+        <p>Mean: <span id="afterMean">-</span></p>
+        <p>Std: <span id="afterStd">-</span></p>
+      </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 20px;">
+      <button class="btn" onclick="generateNewBatch()">🔄 Generate New Batch</button>
+      <button class="btn btn-secondary" onclick="animateNormalization()">▶️ Animate Process</button>
+    </div>
+  </div>
+
+  <div class="interactive-demo">
+    <h3 class="demo-title">Training Comparison Simulator</h3>
+    <p>Watch how training progresses with and without batch normalization:</p>
+    
+    <div class="comparison-container" style="margin-top: 20px;">
+      <div>
+        <h4 style="color: #f44336;">Without Batch Norm</h4>
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressNoBN" style="width: 0%; background: linear-gradient(90deg, #f44336, #ff5722);"></div>
+          </div>
+        </div>
+        <p>Epoch: <span id="epochNoBN">0</span>/100 | Accuracy: <span id="accNoBN">0</span>%</p>
+      </div>
+      <div>
+        <h4 style="color: #4caf50;">With Batch Norm</h4>
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressBN" style="width: 0%;"></div>
+          </div>
+        </div>
+        <p>Epoch: <span id="epochBN">0</span>/100 | Accuracy: <span id="accBN">0</span>%</p>
+      </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 20px;">
+      <button class="btn" onclick="runTrainingSimulation()">🚀 Run Training Simulation</button>
+      <button class="btn btn-secondary" onclick="resetSimulation()">🔄 Reset</button>
+    </div>
+  </div>
+</section>
+
+<section id="benefits">
+  <h2>🎯 Benefits of Batch Normalization</h2>
+  
+  <div class="card">
+    <h3>1. ⚡ Faster Training (2-10x Speedup)</h3>
+    <div class="eli5-box">
+      <h4>🎈 Simple Explanation</h4>
+      <p>Like having a GPS that constantly recalculates instead of using an old map - you get to your destination much faster!</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>2. 📈 Higher Learning Rates</h3>
+    <table>
+      <tr><th>Without Batch Norm</th><th>With Batch Norm</th></tr>
+      <tr><td>learning_rate = 0.0001</td><td>learning_rate = 0.01</td></tr>
+      <tr><td>Must be tiny to avoid explosions</td><td>Can be 10-100x larger!</td></tr>
+    </table>
+    
+    <div class="analogy-box">
+      <h4>🏠 ANALOGY: Driving Speed</h4>
+      <p>Without batch norm, you're driving on a bumpy dirt road - go too fast and you crash. With batch norm, you're on a smooth highway - you can safely drive much faster!</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>3. 🎲 Less Sensitivity to Initialization</h3>
+    <div class="eli5-box">
+      <h4>🎈 Simple Explanation</h4>
+      <p>Like a self-correcting steering wheel - even if you start driving crooked, it straightens out automatically!</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>4. 🛡️ Built-in Regularization</h3>
+    <p>Batch statistics add natural noise during training, acting like a mild regularizer.</p>
+    <div class="tip-box">
+      <strong>💡 Pro Tip:</strong> Batch norm can reduce the need for dropout, though using both together is still common!
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>5. 🏗️ Enables Deeper Networks</h3>
+    <div class="comparison-container">
+      <div class="comparison-box comparison-bad">
+        <h4>Before Batch Norm</h4>
+        <p class="stat-value">~20 layers</p>
+        <p>Maximum practical depth</p>
+      </div>
+      <div class="comparison-box comparison-good">
+        <h4>After Batch Norm</h4>
+        <p class="stat-value">1000+ layers</p>
+        <p>ResNet, DenseNet became possible!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="code">
+  <h2>💻 Code Examples</h2>
+  
+  <h3>Minimal Example</h3>
+  <div class="code-block">
+    <div class="code-header">Python (Keras)</div>
+    <pre><span class="kw">from</span> tensorflow <span class="kw">import</span> keras
+<span class="kw">from</span> tensorflow.keras <span class="kw">import</span> layers
+
+<span class="cmt"># Simple model with batch normalization</span>
+model = keras.<span class="fn">Sequential</span>([
+    layers.<span class="fn">Dense</span>(<span class="num">128</span>, activation=<span class="str">'relu'</span>),
+    layers.<span class="fn">BatchNormalization</span>(),  <span class="cmt"># &lt;-- Add after dense layer</span>
+    layers.<span class="fn">Dense</span>(<span class="num">10</span>, activation=<span class="str">'softmax'</span>)
+])</pre>
+  </div>
+
+  <h3>Full Example: Comparing With and Without Batch Norm</h3>
+  <div class="code-block">
+    <div class="code-header">Python (Keras)</div>
+    <pre><span class="kw">import</span> tensorflow <span class="kw">as</span> tf
+<span class="kw">from</span> tensorflow <span class="kw">import</span> keras
+
+<span class="cmt"># Load MNIST data</span>
+(x_train, y_train), (x_test, y_test) = keras.datasets.mnist.<span class="fn">load_data</span>()
+x_train = x_train.<span class="fn">reshape</span>(-<span class="num">1</span>, <span class="num">784</span>).<span class="fn">astype</span>(<span class="str">'float32'</span>) / <span class="num">255.0</span>
+
+<span class="cmt"># Model WITHOUT batch normalization</span>
+model_no_bn = keras.<span class="fn">Sequential</span>([
+    keras.layers.<span class="fn">Dense</span>(<span class="num">256</span>, activation=<span class="str">'relu'</span>, input_shape=(<span class="num">784</span>,)),
+    keras.layers.<span class="fn">Dense</span>(<span class="num">128</span>, activation=<span class="str">'relu'</span>),
+    keras.layers.<span class="fn">Dense</span>(<span class="num">64</span>, activation=<span class="str">'relu'</span>),
+    keras.layers.<span class="fn">Dense</span>(<span class="num">10</span>, activation=<span class="str">'softmax'</span>)
+])
+
+<span class="cmt"># Model WITH batch normalization</span>
+model_with_bn = keras.<span class="fn">Sequential</span>([
+    keras.layers.<span class="fn">Dense</span>(<span class="num">256</span>, activation=<span class="str">'relu'</span>, input_shape=(<span class="num">784</span>,)),
+    keras.layers.<span class="fn">BatchNormalization</span>(),  <span class="cmt"># After each dense layer</span>
+    keras.layers.<span class="fn">Dense</span>(<span class="num">128</span>, activation=<span class="str">'relu'</span>),
+    keras.layers.<span class="fn">BatchNormalization</span>(),
+    keras.layers.<span class="fn">Dense</span>(<span class="num">64</span>, activation=<span class="str">'relu'</span>),
+    keras.layers.<span class="fn">BatchNormalization</span>(),
+    keras.layers.<span class="fn">Dense</span>(<span class="num">10</span>, activation=<span class="str">'softmax'</span>)
+])
+
+<span class="cmt"># Compile both models</span>
+<span class="kw">for</span> model <span class="kw">in</span> [model_no_bn, model_with_bn]:
+    model.<span class="fn">compile</span>(
+        optimizer=keras.optimizers.<span class="fn">Adam</span>(learning_rate=<span class="num">0.001</span>),
+        loss=<span class="str">'sparse_categorical_crossentropy'</span>,
+        metrics=[<span class="str">'accuracy'</span>]
+    )
+
+<span class="cmt"># Train and compare!</span>
+history_no_bn = model_no_bn.<span class="fn">fit</span>(x_train, y_train, epochs=<span class="num">20</span>, validation_split=<span class="num">0.2</span>)
+history_with_bn = model_with_bn.<span class="fn">fit</span>(x_train, y_train, epochs=<span class="num">20</span>, validation_split=<span class="num">0.2</span>)</pre>
+  </div>
+
+  <h3>Best Practice: Optimal Layer Placement</h3>
+  <div class="code-block">
+    <div class="code-header">Python (Keras)</div>
+    <pre><span class="cmt"># Recommended pattern: Dense → BatchNorm → Activation</span>
+model = keras.<span class="fn">Sequential</span>([
+    keras.layers.<span class="fn">Dense</span>(<span class="num">128</span>, use_bias=<span class="kw">False</span>),  <span class="cmt"># Bias redundant with BN</span>
+    keras.layers.<span class="fn">BatchNormalization</span>(),
+    keras.layers.<span class="fn">Activation</span>(<span class="str">'relu'</span>),
+    
+    keras.layers.<span class="fn">Dense</span>(<span class="num">64</span>, use_bias=<span class="kw">False</span>),
+    keras.layers.<span class="fn">BatchNormalization</span>(),
+    keras.layers.<span class="fn">Activation</span>(<span class="str">'relu'</span>),
+    
+    keras.layers.<span class="fn">Dense</span>(<span class="num">10</span>, activation=<span class="str">'softmax'</span>)
+])</pre>
+  </div>
+
+  <div class="tip-box">
+    <strong>💡 Pro Tip:</strong> When using BatchNorm, set <code>use_bias=False</code> in Dense layers - the beta parameter in BatchNorm serves the same purpose!
+  </div>
+</section>
+
+<section id="parameters">
+  <h2>⚙️ Understanding the Parameters</h2>
+  
+  <div class="card">
+    <h3>Trainable Parameters (Learned During Training)</h3>
+    <table>
+      <tr><th>Parameter</th><th>Purpose</th><th>Count</th></tr>
+      <tr><td><strong>γ (gamma)</strong></td><td>Learnable scale - controls spread</td><td>1 per feature</td></tr>
+      <tr><td><strong>β (beta)</strong></td><td>Learnable shift - controls center</td><td>1 per feature</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Non-Trainable Parameters (Updated as Running Averages)</h3>
+    <table>
+      <tr><th>Parameter</th><th>Purpose</th><th>Used During</th></tr>
+      <tr><td><strong>moving_mean</strong></td><td>Population mean estimate</td><td>Inference only</td></tr>
+      <tr><td><strong>moving_variance</strong></td><td>Population variance estimate</td><td>Inference only</td></tr>
+    </table>
+  </div>
+
+  <div class="example-box">
+    <h4>📝 SIMPLE EXAMPLE: Parameter Counts</h4>
+    <p><strong>Scenario:</strong> BatchNorm layer after 128-unit Dense layer</p>
+    
+    <table>
+      <tr><th>Parameters</th><th>Count</th><th>Type</th></tr>
+      <tr><td>gamma (scale)</td><td>128</td><td>Trainable</td></tr>
+      <tr><td>beta (shift)</td><td>128</td><td>Trainable</td></tr>
+      <tr><td>moving_mean</td><td>128</td><td>Non-trainable</td></tr>
+      <tr><td>moving_variance</td><td>128</td><td>Non-trainable</td></tr>
+      <tr><td><strong>Total</strong></td><td><strong>512</strong></td><td>256 trainable</td></tr>
+    </table>
+  </div>
+
+  <div class="analogy-box">
+    <h4>🏠 ANALOGY: The Adjustable Thermostat</h4>
+    <p>Gamma and beta are like the temperature range and baseline on a thermostat. You might want your house at 72°F (beta), with ±3° variation allowed (gamma). The network learns what settings work best for each room (layer)!</p>
+  </div>
+
+  <h3>Training vs. Inference</h3>
+  
+  <div class="comparison-container">
+    <div class="comparison-box" style="border-color: #4fc3f7;">
+      <h4>🏋️ During Training</h4>
+      <ul>
+        <li>Uses <strong>batch statistics</strong> (current mini-batch)</li>
+        <li>Updates running averages</li>
+        <li>More noise = regularization effect</li>
+      </ul>
+    </div>
+    <div class="comparison-box" style="border-color: #ff9800;">
+      <h4>🎯 During Inference</h4>
+      <ul>
+        <li>Uses <strong>population statistics</strong> (running averages)</li>
+        <li>No updates to parameters</li>
+        <li>Consistent behavior, any batch size</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <strong>💡 Keras handles this automatically!</strong> Just call <code>model.fit()</code> for training mode and <code>model.predict()</code> for inference mode.
+  </div>
+</section>
+
+<section id="best-practices">
+  <h2>✅ Best Practices</h2>
+  
+  <div class="card">
+    <h3>1. Layer Placement</h3>
+    <div class="flow-diagram">
+      <div class="flow-box flow-input">Dense</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box flow-process">BatchNorm</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box flow-output">Activation</div>
+    </div>
+    <p>Most common and recommended order.</p>
+  </div>
+
+  <div class="card">
+    <h3>2. Batch Size Considerations</h3>
+    <table>
+      <tr><th>Batch Size</th><th>Recommendation</th></tr>
+      <tr><td>32+</td><td>✅ Batch Norm works great</td></tr>
+      <tr><td>8-32</td><td>⚠️ Works but noisier statistics</td></tr>
+      <tr><td>&lt;8</td><td>❌ Consider Layer Norm or Group Norm instead</td></tr>
+      <tr><td>1</td><td>❌ Batch Norm fails (undefined variance)</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>3. Combining with Dropout</h3>
+    <div class="code-block">
+      <div class="code-header">Python (Keras)</div>
+      <pre>model = keras.<span class="fn">Sequential</span>([
+    keras.layers.<span class="fn">Dense</span>(<span class="num">128</span>, activation=<span class="str">'relu'</span>),
+    keras.layers.<span class="fn">BatchNormalization</span>(),
+    keras.layers.<span class="fn">Dropout</span>(<span class="num">0.3</span>),  <span class="cmt"># Dropout AFTER batch norm</span>
+    
+    keras.layers.<span class="fn">Dense</span>(<span class="num">64</span>, activation=<span class="str">'relu'</span>),
+    keras.layers.<span class="fn">BatchNormalization</span>(),
+    keras.layers.<span class="fn">Dropout</span>(<span class="num">0.3</span>),
+    
+    keras.layers.<span class="fn">Dense</span>(<span class="num">10</span>, activation=<span class="str">'softmax'</span>)
+])</pre>
+    </div>
+  </div>
+
+  <div class="warning-box">
+    <strong>⚠️ Common Mistakes to Avoid:</strong>
+    <ul>
+      <li>Using batch norm with batch size = 1</li>
+      <li>Forgetting to set training mode correctly during fine-tuning</li>
+      <li>Adding bias to Dense layers when using BatchNorm (redundant)</li>
+    </ul>
+  </div>
+</section>
+
+<section id="quiz">
+  <h2>🧪 Test Your Knowledge</h2>
+  
+  <div class="quiz-container" id="quiz">
+    <div class="quiz-question" data-correct="2">
+      <h4>1. What problem does batch normalization solve?</h4>
+      <div class="quiz-option" onclick="checkAnswer(this, 0, 0)">A) Overfitting</div>
+      <div class="quiz-option" onclick="checkAnswer(this, 0, 1)">B) Underfitting</div>
+      <div class="quiz-option" onclick="checkAnswer(this, 0, 2)">C) Internal covariate shift</div>
+      <div class="quiz-option" onclick="checkAnswer(this, 0, 3)">D) Data augmentation</div>
+      <div class="quiz-feedback" id="feedback0"></div>
+    </div>
+
+    <div class="quiz-question" data-correct="1">
+      <h4>2. What are γ (gamma) and β (beta) in batch normalization?</h4>
+      <div class="quiz-option" onclick="checkAnswer(this, 1, 0)">A) Fixed constants</div>
+      <div class="quiz-option" onclick="checkAnswer(this, 1, 1)">B) Learnable parameters for scale and shift</div>
+      <div class="quiz-option" onclick="checkAnswer(this, 1, 2)">C) Hyperparameters set before training</div>
+      <div class="quiz-option" onclick="checkAnswer(this, 1, 3)">D) Regularization coefficients</div>
+      <div class="quiz-feedback" id="feedback1"></div>
+    </div>
+
+    <div class="quiz-question" data-correct="0">
+      <h4>3. During inference, batch norm uses:</h4>
+      <div class="quiz-option" onclick="checkAnswer(this, 2, 0)">A) Running averages (population statistics)</div>
+      <div class="quiz-option" onclick="checkAnswer(this, 2, 1)">B) Current batch statistics</div>
+      <div class="quiz-option" onclick="checkAnswer(this, 2, 2)">C) No statistics at all</div>
+      <div class="quiz-option" onclick="checkAnswer(this, 2, 3)">D) Random statistics</div>
+      <div class="quiz-feedback" id="feedback2"></div>
+    </div>
+
+    <div class="quiz-question" data-correct="3">
+      <h4>4. Why can you use higher learning rates with batch norm?</h4>
+      <div class="quiz-option" onclick="checkAnswer(this, 3, 0)">A) It removes all gradients</div>
+      <div class="quiz-option" onclick="checkAnswer(this, 3, 1)">B) It uses more memory</div>
+      <div class="quiz-option" onclick="checkAnswer(this, 3, 2)">C) It requires more epochs</div>
+      <div class="quiz-option" onclick="checkAnswer(this, 3, 3)">D) It stabilizes activations, preventing explosions</div>
+      <div class="quiz-feedback" id="feedback3"></div>
+    </div>
+
+    <div class="quiz-question" data-correct="2">
+      <h4>5. What batch size is problematic for batch normalization?</h4>
+      <div class="quiz-option" onclick="checkAnswer(this, 4, 0)">A) 32</div>
+      <div class="quiz-option" onclick="checkAnswer(this, 4, 1)">B) 64</div>
+      <div class="quiz-option" onclick="checkAnswer(this, 4, 2)">C) 1</div>
+      <div class="quiz-option" onclick="checkAnswer(this, 4, 3)">D) 128</div>
+      <div class="quiz-feedback" id="feedback4"></div>
+    </div>
+  </div>
+  
+  <div style="text-align: center; margin-top: 20px;">
+    <p>Score: <span id="quizScore">0</span>/5</p>
+    <button class="btn" onclick="resetQuiz()">🔄 Reset Quiz</button>
+  </div>
+</section>
+
+<section id="summary">
+  <h2>📋 Summary & Cheatsheet</h2>
+  
+  <h3>Concept → Analogy → One-liner</h3>
+  <table>
+    <tr><th>Concept</th><th>Analogy</th><th>One-liner</th></tr>
+    <tr><td>Internal Covariate Shift</td><td>Moving target classroom</td><td>Layer inputs keep changing during training</td></tr>
+    <tr><td>Batch Normalization</td><td>Quality control inspector</td><td>Standardize activations across mini-batches</td></tr>
+    <tr><td>Gamma (γ)</td><td>Thermostat range</td><td>Learnable scale parameter</td></tr>
+    <tr><td>Beta (β)</td><td>Thermostat baseline</td><td>Learnable shift parameter</td></tr>
+    <tr><td>Running Averages</td><td>Long-term memory</td><td>Population stats for inference</td></tr>
+  </table>
+
+  <h3>Quick Reference Cheatsheet</h3>
+  <div class="cheatsheet">
+    <div class="cheat-card">
+      <h5>📐 The Formula</h5>
+      <p>1. μ = mean(batch)</p>
+      <p>2. σ² = variance(batch)</p>
+      <p>3. x̂ = (x - μ) / √(σ² + ε)</p>
+      <p>4. y = γx̂ + β</p>
+    </div>
+    <div class="cheat-card">
+      <h5>⚡ Key Benefits</h5>
+      <p>• 2-10x faster training</p>
+      <p>• 10-100x higher learning rates</p>
+      <p>• Enables deep networks (50+ layers)</p>
+      <p>• Built-in regularization</p>
+    </div>
+    <div class="cheat-card">
+      <h5>✅ Best Practices</h5>
+      <p>• Place after Dense, before Activation</p>
+      <p>• Use batch size ≥ 32</p>
+      <p>• Set use_bias=False in Dense</p>
+      <p>• Can combine with Dropout</p>
+    </div>
+    <div class="cheat-card">
+      <h5>⚠️ Watch Out</h5>
+      <p>• Batch size = 1 breaks it</p>
+      <p>• Different behavior train vs. inference</p>
+      <p>• Small batches = noisy statistics</p>
+    </div>
+  </div>
+
+  <h3>Key Takeaways</h3>
+  <div class="card">
+    <ol>
+      <li><strong>Internal covariate shift</strong> slows training by constantly changing layer inputs</li>
+      <li><strong>Batch normalization</strong> normalizes activations to consistent mean and variance</li>
+      <li><strong>The algorithm</strong>: compute stats → normalize → scale (γ) and shift (β)</li>
+      <li><strong>γ and β</strong> let the network learn optimal activation distributions</li>
+      <li><strong>Major benefits</strong>: faster training, higher learning rates, deeper networks</li>
+      <li><strong>Training vs. inference</strong>: batch stats vs. population stats</li>
+      <li><strong>Enabled modern architectures</strong>: ResNet, DenseNet, and more</li>
+    </ol>
+  </div>
+
+  <h3>📚 External Resources</h3>
+  <div class="card">
+    <ul>
+      <li><a href="https://arxiv.org/abs/1502.03167" style="color: #4fc3f7;">Original Paper: Batch Normalization (Ioffe & Szegedy)</a></li>
+      <li><a href="https://arxiv.org/abs/1805.11604" style="color: #4fc3f7;">How Does Batch Normalization Help Optimization?</a></li>
+      <li><a href="https://arxiv.org/abs/1803.08494" style="color: #4fc3f7;">Group Normalization (alternative for small batches)</a></li>
+    </ul>
+  </div>
+</section>
+</main>
+</div>
+
+<script>
+let currentBatch = [];
+let quizScore = 0;
+const quizAnswers = [2, 1, 0, 3, 2];
+const quizExplanations = [
+  "Batch normalization specifically addresses internal covariate shift - the changing distribution of layer inputs during training.",
+  "Gamma and beta are learnable parameters that allow the network to scale and shift the normalized values, preserving expressiveness.",
+  "During inference, batch norm uses running averages (population statistics) computed during training for consistent behavior.",
+  "Batch norm stabilizes activations, preventing them from exploding or vanishing, which allows for much higher learning rates.",
+  "Batch size of 1 is problematic because you can't compute meaningful variance from a single sample!"
+];
+
+function generateBatch(size, variance) {
+  const batch = [];
+  const baseMean = Math.random() * 10 - 5;
+  for (let i = 0; i < size; i++) {
+    batch.push(baseMean + (Math.random() - 0.5) * variance * 2);
+  }
+  return batch;
+}
+
+function normalizeBatch(batch) {
+  const mean = batch.reduce((a, b) => a + b, 0) / batch.length;
+  const variance = batch.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / batch.length;
+  const std = Math.sqrt(variance + 1e-5);
+  return batch.map(x => (x - mean) / std);
+}
+
+function renderBars(containerId, values, maxAbs) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  values.forEach(v => {
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    const height = Math.min(Math.abs(v) / maxAbs * 100, 100);
+    bar.style.height = height + 'px';
+    bar.style.background = v >= 0 ? 
+      'linear-gradient(to top, #4fc3f7, #81d4fa)' : 
+      'linear-gradient(to top, #f44336, #ff5722)';
+    container.appendChild(bar);
+  });
+}
+
+function updateDemo() {
+  const batchSize = parseInt(document.getElementById('batchSize').value);
+  const variance = parseInt(document.getElementById('variance').value);
+  
+  document.getElementById('batchSizeVal').textContent = batchSize;
+  document.getElementById('varianceVal').textContent = variance <= 3 ? 'Low' : variance <= 7 ? 'Medium' : 'High';
+  
+  currentBatch = generateBatch(batchSize, variance);
+  const normalized = normalizeBatch(currentBatch);
+  
+  const beforeMean = (currentBatch.reduce((a, b) => a + b, 0) / currentBatch.length).toFixed(2);
+  const beforeStd = Math.sqrt(currentBatch.reduce((a, b) => a + Math.pow(b - beforeMean, 2), 0) / currentBatch.length).toFixed(2);
+  
+  const afterMean = (normalized.reduce((a, b) => a + b, 0) / normalized.length).toFixed(2);
+  const afterStd = Math.sqrt(normalized.reduce((a, b) => a + Math.pow(b - afterMean, 2), 0) / normalized.length).toFixed(2);
+  
+  document.getElementById('beforeMean').textContent = beforeMean;
+  document.getElementById('beforeStd').textContent = beforeStd;
+  document.getElementById('afterMean').textContent = afterMean;
+  document.getElementById('afterStd').textContent = afterStd;
+  
+  const maxBefore = Math.max(...currentBatch.map(Math.abs));
+  renderBars('beforeChart', currentBatch, maxBefore);
+  renderBars('afterChart', normalized, 3);
+}
+
+function generateNewBatch() {
+  updateDemo();
+}
+
+function animateNormalization() {
+  const normalized = normalizeBatch(currentBatch);
+  const container = document.getElementById('beforeChart');
+  const bars = container.querySelectorAll('.bar');
+  const maxBefore = Math.max(...currentBatch.map(Math.abs));
+  
+  bars.forEach((bar, i) => {
+    setTimeout(() => {
+      const height = Math.min(Math.abs(normalized[i]) / 3 * 100, 100);
+      bar.style.height = height + 'px';
+      bar.style.background = 'linear-gradient(to top, #4caf50, #81c784)';
+    }, i * 100);
+  });
+}
+
+let simRunning = false;
+function runTrainingSimulation() {
+  if (simRunning) return;
+  simRunning = true;
+  
+  let epochNoBN = 0, epochBN = 0;
+  let accNoBN = 0, accBN = 0;
+  
+  const interval = setInterval(() => {
+    if (epochBN < 100) {
+      epochBN++;
+      accBN = Math.min(98, accBN + (100 - accBN) * 0.08);
+      document.getElementById('epochBN').textContent = epochBN;
+      document.getElementById('accBN').textContent = accBN.toFixed(1);
+      document.getElementById('progressBN').style.width = accBN + '%';
+    }
+    
+    if (epochNoBN < 100) {
+      epochNoBN++;
+      accNoBN = Math.min(92, accNoBN + (92 - accNoBN) * 0.03);
+      document.getElementById('epochNoBN').textContent = epochNoBN;
+      document.getElementById('accNoBN').textContent = accNoBN.toFixed(1);
+      document.getElementById('progressNoBN').style.width = accNoBN + '%';
+    }
+    
+    if (epochNoBN >= 100 && epochBN >= 100) {
+      clearInterval(interval);
+      simRunning = false;
+    }
+  }, 50);
+}
+
+function resetSimulation() {
+  simRunning = false;
+  document.getElementById('epochBN').textContent = '0';
+  document.getElementById('epochNoBN').textContent = '0';
+  document.getElementById('accBN').textContent = '0';
+  document.getElementById('accNoBN').textContent = '0';
+  document.getElementById('progressBN').style.width = '0%';
+  document.getElementById('progressNoBN').style.width = '0%';
+}
+
+function checkAnswer(el, questionIdx, answerIdx) {
+  const question = el.parentElement;
+  const options = question.querySelectorAll('.quiz-option');
+  const feedback = document.getElementById('feedback' + questionIdx);
+  
+  if (question.dataset.answered) return;
+  question.dataset.answered = true;
+  
+  options.forEach((opt, i) => {
+    if (i === quizAnswers[questionIdx]) {
+      opt.classList.add('correct');
+    } else if (i === answerIdx && answerIdx !== quizAnswers[questionIdx]) {
+      opt.classList.add('incorrect');
+    }
+  });
+  
+  if (answerIdx === quizAnswers[questionIdx]) {
+    quizScore++;
+    feedback.style.background = 'rgba(76,175,80,0.2)';
+    feedback.innerHTML = '✅ Correct! ' + quizExplanations[questionIdx];
+  } else {
+    feedback.style.background = 'rgba(244,67,54,0.2)';
+    feedback.innerHTML = '❌ Not quite. ' + quizExplanations[questionIdx];
+  }
+  feedback.style.display = 'block';
+  document.getElementById('quizScore').textContent = quizScore;
+}
+
+function resetQuiz() {
+  quizScore = 0;
+  document.getElementById('quizScore').textContent = '0';
+  document.querySelectorAll('.quiz-question').forEach(q => {
+    delete q.dataset.answered;
+    q.querySelectorAll('.quiz-option').forEach(opt => {
+      opt.classList.remove('correct', 'incorrect');
+    });
+  });
+  document.querySelectorAll('.quiz-feedback').forEach(f => {
+    f.style.display = 'none';
+  });
+}
+
+// Navigation highlighting
+document.querySelectorAll('nav a').forEach(link => {
+  link.addEventListener('click', function() {
+    

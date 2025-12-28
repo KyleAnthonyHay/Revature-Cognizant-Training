@@ -13,3 +13,6 @@ Python 3.12 is used for these exercises because TensorFlow does not support Pyth
 Exercise 3 was skipped as it was not assigned.
 
 
+
+
+

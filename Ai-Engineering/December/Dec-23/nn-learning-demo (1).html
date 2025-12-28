@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Network Learning - Complete Guide</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+        .header { 
+            text-align: center; 
+            padding: 20px; 
+            background: rgba(0,0,0,0.3);
+            border-bottom: 1px solid #4fc3f7;
+        }
+        h1 { color: #4fc3f7; margin-bottom: 5px; }
+        .subtitle { color: #aaa; font-size: 14px; }
+        .main-container { display: flex; min-height: calc(100vh - 80px); }
+        .sidebar { 
+            width: 220px; 
+            background: rgba(0,0,0,0.3); 
+            padding: 15px;
+            border-right: 1px solid #333;
+            overflow-y: auto;
+        }
+        .sidebar-section { margin-bottom: 20px; }
+        .sidebar-title { 
+            color: #4fc3f7; 
+            font-size: 11px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        .nav-item { 
+            display: block;
+            padding: 10px 12px; 
+            color: #ccc; 
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-bottom: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .nav-item:hover { background: #2a2a4a; color: #fff; }
+        .nav-item.active { background: #4fc3f7; color: #1a1a2e; font-weight: bold; }
+        .content-area { 
+            flex: 1; 
+            padding: 30px; 
+            overflow-y: auto;
+            max-width: 1000px;
+        }
+        .section { display: none; }
+        .section.active { display: block; }
+        h2 { color: #4fc3f7; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        h3 { color: #81d4fa; margin: 20px 0 10px 0; }
+        h4 { color: #b3e5fc; margin: 15px 0 8px 0; }
+        p { color: #ccc; line-height: 1.7; margin-bottom: 12px; }
+        .card { 
+            background: #2a2a4a; 
+            border-radius: 12px; 
+            padding: 20px; 
+            margin: 15px 0;
+        }
+        .card-dark { background: #1a1a3a; }
+        .code-block { 
+            background: #0d1117; 
+            border-radius: 8px; 
+            padding: 15px; 
+            margin: 15px 0;
+            overflow-x: auto;
+            border: 1px solid #333;
+        }
+        .code-block pre { 
+            color: #e6edf3; 
+            font-family: 'Consolas', 'Monaco', monospace; 
+            font-size: 13px;
+            line-height: 1.5;
+            margin: 0;
+            white-space: pre-wrap;
+        }
+        .code-header { 
+            background: #161b22; 
+            padding: 8px 15px; 
+            border-radius: 8px 8px 0 0;
+            border: 1px solid #333;
+            border-bottom: none;
+            margin-bottom: -1px;
+            font-size: 12px;
+            color: #8b949e;
+        }
+        .keyword { color: #ff7b72; }
+        .string { color: #a5d6ff; }
+        .function { color: #d2a8ff; }
+        .comment { color: #8b949e; }
+        .number { color: #79c0ff; }
+        .class { color: #7ee787; }
+        button { 
+            padding: 10px 20px; 
+            background: #4fc3f7; 
+            border: none; 
+            color: #1a1a2e; 
+            cursor: pointer; 
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 13px;
+            transition: all 0.2s;
+            margin: 5px;
+        }
+        button:hover { background: #81d4fa; transform: translateY(-2px); }
+        button.secondary { background: #3a3a6a; color: #fff; }
+        button.secondary:hover { background: #4a4a8a; }
+        .flex-row { display: flex; gap: 20px; flex-wrap: wrap; }
+        .flex-1 { flex: 1; min-width: 250px; }
+        .layer-demo { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; padding: 20px; }
+        .layer-box { 
+            text-align: center; 
+            padding: 15px 20px; 
+            background: #3a3a6a; 
+            border-radius: 10px;
+            min-width: 100px;
+            transition: all 0.3s;
+        }
+        .layer-box.active { background: #4fc3f7; color: #1a1a2e; transform: scale(1.1); }
+        .layer-icon { font-size: 28px; margin-bottom: 5px; }
+        .layer-label { font-size: 11px; font-weight: bold; }
+        .layer-desc { font-size: 10px; color: #aaa; }
+        .layer-box.active .layer-desc { color: #1a1a2e; }
+        .arrow { color: #4fc3f7; font-size: 20px; }
+        .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; }
+        .metric { text-align: center; padding: 15px; background: #1a1a3a; border-radius: 10px; }
+        .metric-value { font-size: 24px; font-weight: bold; color: #4fc3f7; }
+        .metric-label { font-size: 11px; color: #888; margin-top: 5px; }
+        .good { color: #4caf50 !important; }
+        .bad { color: #f44336 !important; }
+        .warning { color: #ff9800 !important; }
+        .progress-bar { 
+            width: 100%; height: 20px; 
+            background: #1a1a3a; 
+            border-radius: 10px; 
+            overflow: hidden;
+        }
+        .progress-fill { 
+            height: 100%; 
+            background: linear-gradient(90deg, #f44336, #ff9800, #4caf50);
+            transition: width 0.3s;
+        }
+        .quiz-btn { 
+            display: block; width: 100%; 
+            padding: 12px 15px; 
+            margin: 8px 0; 
+            background: #1a1a3a; 
+            border: 2px solid #3a3a6a;
+            border-radius: 8px; 
+            color: #fff;
+            text-align: left;
+            font-size: 13px;
+        }
+        .quiz-btn:hover { border-color: #4fc3f7; background: #2a2a4a; transform: none; }
+        .quiz-btn.correct { border-color: #4caf50; background: #1a3a1a; }
+        .quiz-btn.wrong { border-color: #f44336; background: #3a1a1a; }
+        .explanation { 
+            padding: 12px; 
+            background: #1a1a3a; 
+            border-left: 3px solid #4fc3f7;
+            border-radius: 0 8px 8px 0;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+        .hidden { display: none !important; }
+        .tag { 
+            display: inline-block; 
+            padding: 3px 8px; 
+            background: #4fc3f7; 
+            color: #1a1a2e;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .tag.orange { background: #ff9800; }
+        .tag.green { background: #4caf50; }
+        .tag.purple { background: #9c27b0; color: #fff; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #333; font-size: 13px; }
+        th { background: #1a1a3a; color: #4fc3f7; }
+        .canvas-container { background: #1a1a3a; border-radius: 8px; padding: 15px; text-align: center; }
+        canvas { max-width: 100%; }
+        ul { margin: 10px 0 10px 25px; }
+        li { color: #ccc; margin: 8px 0; line-height: 1.6; }
+        .tip-box { 
+            background: linear-gradient(135deg, #1a3a1a 0%, #2a4a2a 100%);
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+        }
+        .warning-box { 
+            background: linear-gradient(135deg, #3a2a1a 0%, #4a3a2a 100%);
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+        }
+        .info-box { 
+            background: linear-gradient(135deg, #1a2a3a 0%, #2a3a4a 100%);
+            border-left: 4px solid #4fc3f7;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+        }
+        @media (max-width: 768px) {
+            .main-container { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #333; }
+            .content-area { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧠 Neural Network Learning</h1>
+        <p class="subtitle">Complete Interactive Guide with TensorFlow & Keras Code</p>
+    </div>
+    
+    <div class="main-container">
+        <nav class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">📚 Concepts</div>
+                <a class="nav-item active" onclick="showSection('intro')">Introduction</a>
+                <a class="nav-item" onclick="showSection('layers')">Hierarchical Learning</a>
+                <a class="nav-item" onclick="showSection('training')">Training Loop</a>
+                <a class="nav-item" onclick="showSection('overfit')">Overfitting</a>
+                <a class="nav-item" onclick="showSection('transfer')">Transfer Learning</a>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">💻 Code Examples</div>
+                <a class="nav-item" onclick="showSection('code-basic')">Basic Model</a>
+                <a class="nav-item" onclick="showSection('code-training')">Training & Monitoring</a>
+                <a class="nav-item" onclick="showSection('code-viz')">Visualization</a>
+                <a class="nav-item" onclick="showSection('code-transfer')">Transfer Learning</a>
+                <a class="nav-item" onclick="showSection('code-tips')">Tips & Best Practices</a>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">🎮 Interactive</div>
+                <a class="nav-item" onclick="showSection('playground')">NN Playground</a>
+                <a class="nav-item" onclick="showSection('quiz')">Quiz</a>
+                <a class="nav-item" onclick="showSection('summary')">Summary</a>
+            </div>
+        </nav>
+        
+        <main class="content-area">
+            <!-- INTRO -->
+            <div id="intro" class="section active">
+                <h2>🎯 Introduction: Why This Matters</h2>
+                
+                <p>Neural networks are often called "black boxes" — but understanding how they learn transforms your ability to build effective AI systems.</p>
+                
+                <div class="card">
+                    <h3>What You'll Learn</h3>
+                    <div class="flex-row">
+                        <div class="flex-1">
+                            <h4>🧱 Concepts</h4>
+                            <ul>
+                                <li>How networks learn layer by layer</li>
+                                <li>The training loop explained simply</li>
+                                <li>What overfitting is & how to prevent it</li>
+                                <li>Transfer learning to save time</li>
+                            </ul>
+                        </div>
+                        <div class="flex-1">
+                            <h4>💻 Practical Skills</h4>
+                            <ul>
+                                <li>Build models with Keras</li>
+                                <li>Monitor training progress</li>
+                                <li>Visualize learned features</li>
+                                <li>Apply pre-trained models</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>The Big Picture</h3>
+                <div class="card card-dark">
+                    <div class="layer-demo">
+                        <div class="layer-box">
+                            <div class="layer-icon">🎲</div>
+                            <div class="layer-label">RANDOM</div>
+                            <div class="layer-desc">Start with random weights</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="layer-box">
+                            <div class="layer-icon">🔄</div>
+                            <div class="layer-label">TRAIN</div>
+                            <div class="layer-desc">Learn from mistakes</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="layer-box">
+                            <div class="layer-icon">🧠</div>
+                            <div class="layer-label">INTELLIGENT</div>
+                            <div class="layer-desc">Meaningful patterns</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <strong>💡 Key Insight:</strong> Neural networks don't magically understand things. They gradually adjust numbers (weights) to transform inputs into correct outputs. It's systematic, not magic!
+                </div>
+            </div>
+            
+            <!-- LAYERS -->
+            <div id="layers" class="section">
+                <h2>🧱 Hierarchical Learning: Simple → Complex</h2>
+                
+                <p>The most important concept: networks learn in <strong>layers</strong>, from simple features to complex abstractions.</p>
+                
+                <div class="card">
+                    <h3>🐕 Example: Recognizing a Dog</h3>
+                    <p>Click "Animate" to see how each layer contributes:</p>
+                    <div class="card-dark" style="padding: 20px; margin: 15px 0;">
+                        <div class="layer-demo" id="dogLayers">
+                            <div class="layer-box" id="dl1">
+                                <div class="layer-icon">📐</div>
+                                <div class="layer-label">LAYER 1</div>
+                                <div class="layer-desc">Edges & Lines</div>
+                            </div>
+                            <div class="arrow">→</div>
+                            <div class="layer-box" id="dl2">
+                                <div class="layer-icon">🔷</div>
+                                <div class="layer-label">LAYER 2</div>
+                                <div class="layer-desc">Shapes & Textures</div>
+                            </div>
+                            <div class="arrow">→</div>
+                            <div class="layer-box" id="dl3">
+                                <div class="layer-icon">👁️</div>
+                                <div class="layer-label">LAYER 3</div>
+                                <div class="layer-desc">Eyes, Ears, Nose</div>
+                            </div>
+                            <div class="arrow">→</div>
+                            <div class="layer-box" id="dl4">
+                                <div class="layer-icon">🐕</div>
+                                <div class="layer-label">OUTPUT</div>
+                                <div class="layer-desc">"It's a Dog!"</div>
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <button onclick="animateDogLayers()">▶️ Animate</button>
+                            <button class="secondary" onclick="resetDogLayers()">🔄 Reset</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>What Each Layer Learns</h3>
+                <table>
+                    <tr><th>Layer</th><th>Learns</th><th>Example</th><th>Analogy</th></tr>
+                    <tr><td><span class="tag">Layer 1</span></td><td>Edges, lines, colors</td><td>Horizontal line, vertical edge</td><td>LEGO bricks</td></tr>
+                    <tr><td><span class="tag orange">Layer 2-3</span></td><td>Textures, shapes</td><td>Fur pattern, circular shape</td><td>LEGO assemblies</td></tr>
+                    <tr><td><span class="tag green">Layer 4-5</span></td><td>Object parts</td><td>Dog ear, car wheel, eye</td><td>LEGO components</td></tr>
+                    <tr><td><span class="tag purple">Final</span></td><td>Complete objects</td><td>"This is a dog"</td><td>Complete model</td></tr>
+                </table>
+                
+                <div class="tip-box">
+                    <strong>🏠 Analogy: Building a House</strong><br>
+                    You can't build a house without bricks → walls → rooms. Neural networks work the same way: simple features combine into complex understanding.
+                </div>
+                
+                <h3>Text Classification Example</h3>
+                <div class="card">
+                    <p>For sentiment analysis ("Is this review positive or negative?"):</p>
+                    <table>
+                        <tr><th>Layer</th><th>What It Detects</th></tr>
+                        <tr><td>Embedding</td><td>Word meanings ("good" ≈ "great")</td></tr>
+                        <tr><td>Early RNN</td><td>Phrases ("not good" = negation)</td></tr>
+                        <tr><td>Middle</td><td>Sentence patterns, tone</td></tr>
+                        <tr><td>Final</td><td>Overall sentiment: Positive/Negative</td></tr>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- TRAINING -->
+            <div id="training" class="section">
+                <h2>🔄 The Training Loop</h2>
+                
+                <p>Training is simple: <strong>Guess → Check → Adjust → Repeat</strong></p>
+                
+                <div class="card">
+                    <h3>Interactive Training Simulation</h3>
+                    <div class="card-dark" style="padding: 20px;">
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <span id="trainStep1" style="padding: 8px 15px; background: #3a3a6a; border-radius: 20px; margin: 5px;">1️⃣ Guess</span>
+                            <span style="color: #4fc3f7;">→</span>
+                            <span id="trainStep2" style="padding: 8px 15px; background: #3a3a6a; border-radius: 20px; margin: 5px;">2️⃣ Check Error</span>
+                            <span style="color: #4fc3f7;">→</span>
+                            <span id="trainStep3" style="padding: 8px 15px; background: #3a3a6a; border-radius: 20px; margin: 5px;">3️⃣ Adjust</span>
+                        </div>
+                        
+                        <div style="text-align: center; font-size: 36px; margin: 20px 0;">
+                            Epoch: <span id="epochNum" style="color: #4fc3f7;">0</span> / 100
+                        </div>
+                        
+                        <div style="margin: 15px 0;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="width: 80px;">Loss:</span>
+                                <div class="progress-bar" style="flex: 1;">
+                                    <div class="progress-fill" id="lossBar" style="width: 95%;"></div>
+                                </div>
+                                <span id="lossVal" style="width: 60px;">2.30</span>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-grid" style="margin-top: 20px;">
+                            <div class="metric">
+                                <div class="metric-value" id="accVal">5%</div>
+                                <div class="metric-label">Accuracy</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value" id="statusIcon">🎲</div>
+                                <div class="metric-label">Status</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value" id="learnedIcon">❓</div>
+                                <div class="metric-label">Learning</div>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 20px;">
+                            <button onclick="startTraining()">▶️ Start Training</button>
+                            <button class="secondary" onclick="resetTraining()">🔄 Reset</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>What Happens in Each Step</h3>
+                <div class="flex-row">
+                    <div class="flex-1 card">
+                        <h4>1️⃣ Forward Pass (Guess)</h4>
+                        <p>Data flows through the network. Each layer transforms it. Final layer outputs a prediction.</p>
+                    </div>
+                    <div class="flex-1 card">
+                        <h4>2️⃣ Loss Calculation (Check)</h4>
+                        <p>Compare prediction to actual answer. Calculate how wrong it was (the "loss").</p>
+                    </div>
+                    <div class="flex-1 card">
+                        <h4>3️⃣ Backpropagation (Adjust)</h4>
+                        <p>Calculate which weights caused the error. Adjust them slightly to reduce loss.</p>
+                    </div>
+                </div>
+                
+                <div class="tip-box">
+                    <strong>🎯 Analogy: Learning Darts</strong><br>
+                    Throw → Miss left → Adjust right → Throw again → Getting closer! After hundreds of throws, you hit near the bullseye consistently.
+                </div>
+            </div>
+            
+            <!-- OVERFITTING -->
+            <div id="overfit" class="section">
+                <h2>⚠️ Overfitting: When Learning Goes Wrong</h2>
+                
+                <p><strong>Overfitting</strong> = The network memorizes training data instead of learning patterns.</p>
+                
+                <div class="card">
+                    <h3>Good Learning vs Overfitting</h3>
+                    <div class="flex-row">
+                        <div class="flex-1 card-dark" style="padding: 20px; text-align: center;">
+                            <h4 class="good">✅ Good Learning</h4>
+                            <div class="canvas-container">
+                                <canvas id="goodCanvas" width="280" height="150"></canvas>
+                            </div>
+                            <p style="margin-top: 10px; font-size: 12px;">Both training & validation improve together</p>
+                        </div>
+                        <div class="flex-1 card-dark" style="padding: 20px; text-align: center;">
+                            <h4 class="bad">❌ Overfitting</h4>
+                            <div class="canvas-container">
+                                <canvas id="badCanvas" width="280" height="150"></canvas>
+                            </div>
+                            <p style="margin-top: 10px; font-size: 12px;">Training improves, validation gets worse!</p>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 15px;">
+                        <button onclick="animateOverfitCharts()">▶️ Show Comparison</button>
+                    </div>
+                </div>
+                
+                <h3>Signs of Overfitting</h3>
+                <table>
+                    <tr><th>Metric</th><th>Healthy</th><th>Overfitting</th></tr>
+                    <tr><td>Training Accuracy</td><td>85%</td><td>99%</td></tr>
+                    <tr><td>Validation Accuracy</td><td>82%</td><td>60%</td></tr>
+                    <tr><td>Gap</td><td class="good">Small (3%)</td><td class="bad">Large (39%)</td></tr>
+                </table>
+                
+                <h3>How to Prevent Overfitting</h3>
+                <div class="flex-row">
+                    <div class="flex-1 card">
+                        <h4>🎭 Dropout</h4>
+                        <p>Randomly "turn off" neurons during training. Forces network to learn redundant patterns.</p>
+                    </div>
+                    <div class="flex-1 card">
+                        <h4>📏 Regularization</h4>
+                        <p>Add penalty for large weights (L1/L2). Keeps weights small and generalizable.</p>
+                    </div>
+                    <div class="flex-1 card">
+                        <h4>📊 More Data</h4>
+                        <p>More examples = harder to memorize. Data augmentation helps too.</p>
+                    </div>
+                    <div class="flex-1 card">
+                        <h4>⏱️ Early Stopping</h4>
+                        <p>Stop training when validation loss starts increasing.</p>
+                    </div>
+                </div>
+                
+                <div class="warning-box">
+                    <strong>📚 Analogy: Studying for an Exam</strong><br>
+                    <strong>Good student:</strong> Understands concepts → Can solve new problems<br>
+                    <strong>Memorizer:</strong> Memorizes exact answers → Fails on new questions
+                </div>
+            </div>
+            
+            <!-- TRANSFER LEARNING -->
+            <div id="transfer" class="section">
+                <h2>🔄 Transfer Learning: Don't Start from Scratch</h2>
+                
+                <p>Use knowledge from pre-trained models to jumpstart your training!</p>
+                
+                <div class="card">
+                    <h3>How It Works</h3>
+                    <div class="card-dark" style="padding: 20px;">
+                        <div class="layer-demo">
+                            <div class="layer-box" style="border: 2px solid #4fc3f7;">
+                                <div class="layer-icon">🏛️</div>
+                                <div class="layer-label">PRE-TRAINED</div>
+                                <div class="layer-desc">Edges, textures, shapes</div>
+                                <div style="margin-top: 8px;"><span class="tag">FROZEN ❄️</span></div>
+                            </div>
+                            <div class="arrow">→</div>
+                            <div class="layer-box" style="border: 2px solid #4caf50;">
+                                <div class="layer-icon">🎯</div>
+                                <div class="layer-label">YOUR LAYERS</div>
+                                <div class="layer-desc">Your specific task</div>
+                                <div style="margin-top: 8px;"><span class="tag green">TRAINABLE ✏️</span></div>
+                            </div>
+                            <div class="arrow">→</div>
+                            <div class="layer-box">
+                                <div class="layer-icon">✅</div>
+                                <div class="layer-label">OUTPUT</div>
+                                <div class="layer-desc">Cat vs Dog</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Why Transfer Learning?</h3>
+                <table>
+                    <tr><th>Aspect</th><th>From Scratch</th><th>Transfer Learning</th></tr>
+                    <tr><td>Data Needed</td><td class="bad">1 million+ images</td><td class="good">100-1000 images</td></tr>
+                    <tr><td>Training Time</td><td class="bad">Days/Weeks</td><td class="good">Minutes/Hours</td></tr>
+                    <tr><td>Compute Cost</td><td class="bad">$$$</td><td class="good">$</td></tr>
+                    <tr><td>Performance</td><td>Good (with enough data)</td><td class="good">Often better!</td></tr>
+                </table>
+                
+                <h3>Popular Pre-trained Models</h3>
+                <div class="flex-row">
+                    <div class="flex-1 card">
+                        <h4>🖼️ Images</h4>
+                        <ul>
+                            <li>VGG16, VGG19</li>
+                            <li>ResNet50, ResNet101</li>
+                            <li>EfficientNet</li>
+                            <li>MobileNet (lightweight)</li>
+                        </ul>
+                    </div>
+                    <div class="flex-1 card">
+                        <h4>📝 Text</h4>
+                        <ul>
+                            <li>BERT</li>
+                            <li>GPT models</li>
+                            <li>Word2Vec embeddings</li>
+                            <li>GloVe embeddings</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="tip-box">
+                    <strong>🗣️ Analogy: Learning Italian After Spanish</strong><br>
+                    You already know grammar, sentence structure, Latin roots. You just learn Italian-specific vocabulary. Much faster than starting from zero!
+                </div>
+            </div>
+            
+            <!-- CODE: BASIC -->
+            <div id="code-basic" class="section">
+                <h2>💻 Code: Building Your First Model</h2>
+                
+                <h3>1. Import Libraries</h3>
+                <div class="code-header">Python - TensorFlow/Keras</div>
+                <div class="code-block"><pre><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf
+<span class="keyword">from</span> tensorflow <span class="keyword">import</span> keras
+<span class="keyword">from</span> tensorflow.keras <span class="keyword">import</span> layers
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</pre></div>
+                
+                <h3>2. Create a Simple Model</h3>
+                <div class="code-header">Python - Sequential API</div>
+                <div class="code-block"><pre><span class="comment"># Simple neural network for classification</span>
+model = keras.<span class="function">Sequential</span>([
+    <span class="comment"># Input layer: 784 features (28x28 image flattened)</span>
+    layers.<span class="class">Dense</span>(<span class="number">128</span>, activation=<span class="string">'relu'</span>, input_shape=(<span class="number">784</span>,)),
+    
+    <span class="comment"># Hidden layer</span>
+    layers.<span class="class">Dense</span>(<span class="number">64</span>, activation=<span class="string">'relu'</span>),
+    
+    <span class="comment"># Output layer: 10 classes</span>
+    layers.<span class="class">Dense</span>(<span class="number">10</span>, activation=<span class="string">'softmax'</span>)
+])
+
+<span class="comment"># View model architecture</span>
+model.<span class="function">summary</span>()</pre></div>
+                
+                <div class="info-box">
+                    <strong>📝 Layer Breakdown:</strong>
+                    <ul>
+                        <li><code>Dense(128)</code> - 128 neurons, fully connected</li>
+                        <li><code>activation='relu'</code> - ReLU activation (most common)</li>
+                        <li><code>softmax</code> - Outputs probabilities for each class</li>
+                    </ul>
+                </div>
+                
+                <h3>3. Compile the Model</h3>
+                <div class="code-header">Python</div>
+                <div class="code-block"><pre><span class="comment"># Configure training settings</span>
+model.<span class="function">compile</span>(
+    optimizer=<span class="string">'adam'</span>,           <span class="comment"># Optimization algorithm</span>
+    loss=<span class="string">'sparse_categorical_crossentropy'</span>,  <span class="comment"># Loss function</span>
+    metrics=[<span class="string">'accuracy'</span>]         <span class="comment"># What to track</span>
+)</pre></div>
+                
+                <h3>4. Load Sample Data (MNIST)</h3>
+                <div class="code-header">Python</div>
+                <div class="code-block"><pre><span class="comment"># Load MNIST dataset (handwritten digits)</span>
+(X_train, y_train), (X_test, y_test) = keras.datasets.mnist.<span class="function">load_data</span>()
+
+<span class="comment"># Preprocess: normalize to 0-1 range</span>
+X_train = X_train.<span class="function">reshape</span>(-<span class="number">1</span>, <span class="number">784</span>) / <span class="number">255.0</span>
+X_test = X_test.<span class="function">reshape</span>(-<span class="number">1</span>, <span class="number">784</span>) / <span class="number">255.0
+
+<span class="function">print</span>(<span class="string">f"Training samples: {len(X_train)}"</span>)
+<span class="function">print</span>(<span class="string">f"Test samples: {len(X_test)}"</span>)</pre></div>
+                
+                <h3>5. Train the Model</h3>
+                <div class="code-header">Python</div>
+                <div class="code-block"><pre><span class="comment"># Train!</span>
+history = model.<span class="function">fit</span>(
+    X_train, y_train,
+    epochs=<span class="number">10</span>,                  <span class="comment"># Number of training iterations</span>
+    batch_size=<span class="number">32</span>,              <span class="comment"># Samples per gradient update</span>
+    validation_split=<span class="number">0.2</span>,       <span class="comment"># Use 20% for validation</span>
+    verbose=<span class="number">1</span>                   <span class="comment"># Show progress</span>
+)</pre></div>
+                
+                <h3>6. Evaluate Performance</h3>
+                <div class="code-header">Python</div>
+                <div class="code-block"><pre><span class="comment"># Test on unseen data</span>
+test_loss, test_accuracy = model.<span class="function">evaluate</span>(X_test, y_test)
+<span class="function">print</span>(<span class="string">f"Test Accuracy: {test_accuracy * 100:.2f}%"</span>)</pre></div>
+            </div>
+            
+            <!-- CODE: TRAINING -->
+            <div id="code-training" class="section">
+                <h2>💻 Code: Training & Monitoring</h2>
+                
+                <h3>Plotting Training History</h3>
+                <div class="code-header">Python</div>
+                <div class="code-block"><pre><span class="keyword">def</span> <span class="function">plot_training_history</span>(history):
+    fig, axes = plt.<span class="function">subplots</span>(<span class="number">1</span>, <span class="number">2</span>, figsize=(<span class="number">12</span>, <span class="number">4</span>))
+    
+    <span class="comment"># Plot Loss</span>
+    axes[<span class="number">0</span>].<span class="function">plot</span>(history.history[<span class="string">'loss'</span>], label=<span class="string">'Training Loss'</span>)
+    axes[<span class="number">0</span>].<span class="function">plot</span>(history.history[<span class="string">'val_loss'</span>], label=<span class="string">'Validation Loss'</span>)
+    axes[<span class="number">0</span>].<span class="function">set_xlabel</span>(<span class="string">'Epoch'</span>)
+    axes[<span class="number">0</span>].<span class="function">set_ylabel</span>(<span class="string">'Loss'</span>)
+    axes[<span class="number">0</span>].<span class="function">legend</span>()
+    axes[<span class="number">0</span>].<span class="function">set_title</span>(<span class="string">'Loss Curve'</span>)
+    
+    <span class="comment"># Plot Accuracy</span>
+    axes[<span class="number">1</span>].<span class="function">plot</span>(history.history[<span class="string">'accuracy'</span>], label=<span class="string">'Training Acc'</span>)
+    axes[<span class="number">1</span>].<span class="function">plot</span>(history.history[<span class="string">'val_accuracy'</span>], label=<span class="string">'Validation Acc'</span>)
+    axes[<span class="number">1</span>].<span class="function">set_xlabel</span>(<span class="string">'Epoch'</span>)
+    axes[<span class="number">1</span>].<span class="function">set_ylabel</span>(<span class="string">'Accuracy'</span>)
+    axes[<span class="number">1</span>].<span class="function">legend</span>()
+    axes[<span class="number">1</span>].<span class="function">set_title</span>(<span class="string">'Accuracy Curve'</span>)
+    
+    plt.<span class="function">tight_layout</span>()
+    plt.<span class="function">show</span>()
+
+<span class="comment"># Use it</span>
+<span class="function">plot_training_history</span>(history)</pre></div>
+                
+                <h3>Using Callbacks</h3>
+                <div class="code-header">Python</div>
+                <div class="code-block"><pre><span class="comment"># Early stopping: stop when validation loss stops improving</span>
+early_stop = keras.callbacks.<span class="class">EarlyStopping</span>(
+    monitor=<span class="string">'val_loss'</span>,
+    patience=<span class="number">5</span>,              <span class="comment"># Wait 5 epochs before stopping</span>
+    restore_best_weights=<span class="keyword">True</span>
+)
+
+<span class="comment"># Model checkpoint: save best model</span>
+checkpoint = keras.callbacks.<span class="class">ModelCheckpoint</span>(
+    <span class="string">'best_model.keras'</span>,
+    monitor=<span class="string">'val_accuracy'</span>,
+    save_best_only=<span class="keyword">True</span>
+)
+
+<span class="comment"># Learning rate scheduler</span>
+lr_scheduler = keras.callbacks.<span class="class">ReduceLROnPlateau</span>(
+    monitor=<span class="string">'val_loss'</span>,
+    factor=<span class="number">0.5</span>,              <span class="comment"># Reduce LR by half</span>
+    patience=<span class="number">3</span>
+)
+
+<span class="comment"># Train with callbacks</span>
+history = model.<span class="function">fit</span>(
+    X_train, y_train,
+    epochs=<span class="number">50</span>,
+    validation_split=<span class="number">0.2</span>,
+    callbacks=[early_stop, checkpoint, lr_scheduler]
+)</pre></div>
+                
+                <h3>Preventing Overfitting with Dropout</h3>
+                <div class="code-header">Python</div>
+                <div class="code-block"><pre><span class="comment"># Model with dropout regularization</span>
+model = keras.<span class="function">Sequential</span>([
+    layers.<span class="class">Dense</span>(<span class="number">256</span>, activation=<span class="string">'relu'</span>, input_shape=(<span class="number">784</span>,)),
+    layers.<span class="class">Dropout</span>(<span class="number">0.3</span>),       <span class="comment"># Drop 30% of neurons randomly</span>
+    
+    layers.<span class="class">Dense</span>(<span class="number">128</span>, activation=<span class="string">'relu'</span>),
+    layers.<span class="class">Dropout</span>(<span class="number">0.3</span>),
+    
+    layers.<span class="class">Dense</span>(<span class="number">64</span>, activation=<span class="string">'relu'</span>),
+    layers.<span class="class">Dropout</span>(<span class="number">0.2</span>),
+    
+    layers.<span class="class">Dense</span>(<span class="number">10</span>, activation=<span class="string">'softmax'</span>)
+])</pre></div>
+                
+                <h3>L2 Regularization</h3>
+                <div class="code-header">Python</div>
+                <div class="code-block"><pre><span class="keyword">from</span> tensorflow.keras <span class="keyword">import</span> regularizers
+
+model = keras.<span class="function">Sequential</span>([
+    layers.<span class="class">Dense</span>(
+        <span class="number">128</span>, 
+        activation=<span class="string">'relu'</span>,
+        kernel_regularizer=regularizers.<span class="function">l2</span>(<span class="number">0.01</span>)  <span class="comment"># L2 penalty</span>
+    ),
+    layers.<span class="class">Dense</span>(<span class="number">10</span>, activation=<span class="string">'softmax'</span>)
+])</pre></div>
+            </div>
+            
+            <!-- CODE: VISUALIZATION -->
+            <div id="code-viz" class="section">
+                <h2>💻 Code: Visualizing What Networks Learn</h2>
+                
+                <h3>Visualize Feature Maps (CNN)</h3>
+                <div class="code-header">Python</div>
+                <div class="code-block"><pre><span class="comment"># Load pre-trained VGG16</span>
+base_model = keras.applications.<span class="class">VGG16</span>(
+    weights=<span class="string">'imagenet'</span>,
+    include_top=<span class="keyword">False</span>
+)
+
+<span class="comment"># Create model that outputs intermediate layers</span>
+layer_outputs = [layer.output <span class="keyword">for</span> layer <span class="keyword">in</span> base_model.layers[:<span class="number">8</span>]]
+activation_model = keras.<span class="class">Model</span>(
+    inputs=base_model.input,
+    outputs=layer_outputs
+)
+
+<span class="comment"># Get activations for an image</span>
+<span class="keyword">def</span> <span class="function">visualize_activations</span>(img_path):
+    <span class="comment"># Load and preprocess image</span>
+    img = keras.preprocessing.image.<span class="function">load_img</span>(img_path, target_size=(<span class="number">224</span>, <span class="number">224</span>))
+    img_array = keras.preprocessing.image.<span class="function">img_to_array</span>(img)
+    img_array = np.<span class="function">expand_dims</span>(img_array, axis=<span class="number">0</span>)
+    img_array = keras.applications.vgg16.<span class="function">preprocess_input</span>(img_array)
+    
+    <span class="comment"># Get activations</span>
+    activations = activation_model.<span class="function">predict</span>(img_array)
+    
+    <span class="comment"># Plot first layer activations</span>
+    first_layer = activations[<span class="number">0</span>]
+    fig, axes = plt.<span class="function">subplots</span>(<span class="number">4</span>, <span class="number">8</span>, figsize=(<span class="number">12</span>, <span class="number">6</span>))
+    <span class="keyword">for</span> i, ax <span class="keyword">in</span> <span class="function">enumerate</span>(axes.flat):
+        <span class="keyword">if</span> i < first_layer.shape[-<span class="number">1</span>]:
+            ax.<span class="function">imshow</span>(first_layer[<span class="number">0</span>, :, :, i], cmap=<span class="string">'viridis'</span>)
+        ax.<span class="function">axis</span>(<span class="string">'off'</span>)
+    plt.<span class="function">suptitle</span>(<span class="string">'Layer 1 Activations'</span>)
+    plt.<span class="function">show</span>()</pre></div>
+                
+                <h3>t-SNE Visualization of Learned Representations</h3>
+                <div class="code-header">Python</div>
+                <div class="code-block"><pre><span class="keyword">from</span> sklearn.manifold <span class="keyword">import</span> TSNE
+
+<span class="comment"># Create encoder (model without last layer)</span>
+encoder = keras.<span class="class">Model</span>(
+    inputs=model.input,
+    outputs=model.layers[-<span class="number">2</span>].output  <span class="comment"># Second-to-last layer</span>
+)
+
+<span class="comment"># Get representations</span>
+representations = encoder.<span class="function">predict</span>(X_test[:<span class="number">1000</span>])
+
+<span class="comment"># Reduce to 2D with t-SNE</span>
+tsne = <span class="class">TSNE</span>(n_components=<span class="number">2</span>, random_state=<span class="number">42</span>, perplexity=<span class="number">30</span>)
+repr_2d = tsne.<span class="function">fit_transform</span>(representations)
+
+<span class="comment"># Plot</span>
+plt.<span class="function">figure</span>(figsize=(<span class="number">10</span>, <span class="number">8</span>))
+scatter = plt.<span class="function">scatter</span>(
+    repr_2d[:, <span class="number">0</span>], repr_2d[:, <span class="number">1</span>],
+    c=y_test[:<span class="number">1000</span>],
+    cmap=<span class="string">'tab10'</span>,
+    alpha=<span class="number">0.7</span>
+)
+plt.<span class="function">colorbar</span>(scatter)
+plt.<span class="function">title</span>(<span class="string">'t-SNE of Learned Representations'</span>)
+plt.<span class="function">show</span>()
+
+<span class="comment"># Similar classes should cluster together!</span></pre></div>
+                
+                <h3>Visualize Filters (What Neurons Look For)</h3>
+                <div class="code-header">Python</div>
+                <div class="code-block"><pre><span class="comment"># Get weights from first conv layer</span>
+filters, biases = base_model.layers[<span class="number">1</span>].<span class="function">get_weights</span>()
+
+<span class="comment"># Normalize for visualization</span>
+f_min, f_max = filters.<span class="function">min</span>(), filters.<span class="function">max</span>()
+filters = (filters - f_min) / (f_max - f_min)
+
+<span class="comment"># Plot first 32 filters</span>
+fig, axes = plt.<span class="function">subplots</span>(<span class="number">4</span>, <span class="number">8</span>, figsize=(<span class="number">10</span>, <span class="number">5</span>))
+<span class="keyword">for</span> i, ax <span class="keyword">in</span> <span class="function">enumerate</span>(axes.flat):
+    ax.<span class="function">imshow</span>(filters[:, :, :, i])
+    ax.<span class="function">axis</span>(<span class="string">'off'</span>)
+plt.<span class="function">suptitle</span>(<span class="string">'First Layer Filters (Edge Detectors)'</span>)
+plt.<span class="function">show</span>()</pre></div>
+            </div>
+            
+            <!-- CODE: TRANSFER -->
+            <div id="code-transfer" class="section">
+                <h2>💻 Code: Transfer Learning</h2>
+                
+                <h3>Basic Transfer Learning</h3>
+                <div class="code-header">Python</div>
+                <div class="code-block"><pre><span class="comment"># Load pre-trained model WITHOUT top layers</span>
+base_model = keras.applications.<span class="class">VGG16</span>(
+    weights=<span class="string">'imagenet'</span>,
+    include_top=<span class="keyword">False</span>,          <span class="comment"># Remove classification head</span>
+    input_shape=(<span class="number">224</span>, <span class="number">224</span>, <span class="number">3</span>)
+)
+
+<span class="comment"># Freeze pre-trained layers (don't train them)</span>
+base_model.trainable = <span class="keyword">False</span>
+
+<span class="comment"># Add your custom layers</span>
+model = keras.<span class="function">Sequential</span>([
+    base_model,
+    layers.<span class="class">GlobalAveragePooling2D</span>(),
+    layers.<span class="class">Dense</span>(<span class="number">256</span>, activation=<span class="string">'relu'</span>),
+    layers.<span class="class">Dropout</span>(<span class="number">0.5</span>),
+    layers.<span class="class">Dense</span>(num_classes, activation=<span class="string">'softmax'</span>)
+])
+
+<span class="comment"># Compile</span>
+model.<span class="function">compile</span>(
+    optimizer=keras.optimizers.<span class="class">Adam</span>(learning_rate=<span class="number">0.001</span>),
+    loss=<span class="string">'categorical_crossentropy'</span>,
+    metrics=[<span class="string">'accuracy'</span>]
+)
+
+<span class="comment"># Train only your new layers</span>
+history = model.<span class="function">fit</span>(
+    train_generator,
+    epochs=<span class="number">10</span>,
+    validation_data=val_generator
+)</pre></div>
+                
+                <h3>Fine-Tuning (Advanced)</h3>
+                <div class="code-header">Python</div>
+                <div class="code-block"><pre><span class="comment"># After initial training, unfreeze some layers</span>
+base_model.trainable = <span class="keyword">True</span>
+
+<span class="comment"># Freeze early layers, train only later layers</span>
+<span class="keyword">for</span> layer <span class="keyword">in</span> base_model.layers[:-<span class="number">4</span>]:  <span class="comment"># Freeze all but last 4</span>
+    layer.trainable = <span class="keyword">False</span>
+
+<span class="comment"># Re-compile with LOWER learning rate</span>
+model.<span class="function">compile</span>(
+    optimizer=keras.optimizers.<span class="class">Adam</span>(learning_rate=<span class="number">1e-5</span>),  <span class="comment"># Very small!</span>
+    loss=<span class="string">'categorical_crossentropy'</span>,
+    metrics=[<span class="string">'accuracy'</span>]
+)
+
+<span class="comment"># Fine-tune</span>
+history_fine = model.<span class="function">fit</span>(
+    train_generator,
+    epochs=<span class="number">10</span>,
+    validation_data=val_generator
+)</pre></div>
+                
+                <h3>Using Different Pre-trained Models</h3>
+                <div class="code-header">Python</div>
+                <div class="code-block"><pre><span class="comment"># ResNet50 - Good for complex images</span>
+base_model = keras.applications.<span class="class">ResNet50</span>(
+    weights=<span class="string">'imagenet'</span>,
+    include_top=<span class="keyword">False</span>,
+    input_shape=(<span class="number">224</span>, <span class="number">224</span>, <span class="number">3</span>)
+)
+
+<span class="comment"># MobileNetV2 - Lightweight, good for mobile</span>
+base_model = keras.applications.<span class="class">MobileNetV2</span>(
+    weights=<span class="string">'imagenet'</span>,
+    include_top=<span class="keyword">False</span>,
+    input_shape=(<span class="number">224</span>, <span class="number">224</span>, <span class="number">3</span>)
+)
+
+<span class="comment"># EfficientNetB0 - Best accuracy/size tradeoff</span>
+base_model = keras.applications.<span class="class">EfficientNetB0</span>(
+    weights=<span class="string">'imagenet'</span>,
+    include_top=<span class="keyword">False</span>,
+    input_shape=(<span class="number">224</span>, <span class="number">224</span>, <span class="number">3</span>)
+)</pre></div>
+                
+                <h3>Data Augmentation</h3>
+                <div class="code-header">Python</div>
+                <div class="code-block"><pre><span class="comment"># Create augmentation layers</span>
+data_augmentation = keras.<span class="function">Sequential</span>([
+    layers.<span class="class">RandomFlip</span>(<span class="string">'horizontal'</span>),
+    layers.<span class="class">RandomRotation</span>(<span class="number">0.2</span>),
+    layers.<span class="class">RandomZoom</span>(<span class="number">0.2</span>),
+    layers.<span class="class">RandomContrast</span>(<span class="number">0.2</span>),
+])
+
+<span class="comment"># Add to model</span>
+model = keras.<span class="function">Sequential</span>([
+    data_augmentation,       <span class="comment"># Augment during training</span>
+    base_model,
+    layers.<span class="class">GlobalAveragePooling2D</span>(),
+    layers.<span class="class">Dense</span>(num_classes, activation=<span class="string">'softmax'</span>)
+])</pre></div>
+            </div>
+            
+            <!-- CODE: TIPS -->
+            <div id="code-tips" class="section">
+                <h2>💻 Tips & Best Practices</h2>
+                
+                <h3>Complete Training Template</h3>
+                <div class="code-header">Python - Production-Ready Template</div>
+                <div class="code-block"><pre><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf
+<span class="keyword">from</span> tensorflow <span class="keyword">import</span> keras
+<span class="keyword">from</span> tensorflow.keras <span class="keyword">import</span> layers
+
+<span class="comment"># 1. LOAD DATA</span>
+(X_train, y_train), (X_test, y_test) = keras.datasets.mnist.<span class="function">load_data</span>()
+X_train = X_train.<span class="function">reshape</span>(-<span class="number">1</span>, <span class="number">784</span>).<span class="function">astype</span>(<span class="string">'float32'</span>) / <span class="number">255</span>
+X_test = X_test.<span class="function">reshape</span>(-<span class="number">1</span>, <span class="number">784</span>).<span class="function">astype</span>(<span class="string">'float32'</span>) / <span class="number">255</span>
+
+<span class="comment"># 2. BUILD MODEL</span>
+model = keras.<span class="function">Sequential</span>([
+    layers.<span class="class">Dense</span>(<span class="number">256</span>, activation=<span class="string">'relu'</span>, input_shape=(<span class="number">784</span>,)),
+    layers.<span class="class">BatchNormalization</span>(),
+    layers.<span class="class">Dropout</span>(<span class="number">0.3</span>),
+    
+    layers.<span class="class">Dense</span>(<span class="number">128</span>, activation=<span class="string">'relu'</span>),
+    layers.<span class="class">BatchNormalization</span>(),
+    layers.<span class="class">Dropout</span>(<span class="number">0.3</span>),
+    
+    layers.<span class="class">Dense</span>(<span class="number">10</span>, activation=<span class="string">'softmax'</span>)
+])
+
+<span class="comment"># 3. COMPILE</span>
+model.<span class="function">compile</span>(
+    optimizer=keras.optimizers.<span class="class">Adam</span>(learning_rate=<span class="number">0.001</span>),
+    loss=<span class="string">'sparse_categorical_crossentropy'</span>,
+    metrics=[<span class="string">'accuracy'</span>]
+)
+
+<span class="comment"># 4. CALLBACKS</span>
+callbacks = [
+    keras.callbacks.<span class="class">EarlyStopping</span>(
+        monitor=<span class="string">'val_loss'</span>,
+        patience=<span class="number">5</span>,
+        restore_best_weights=<span class="keyword">True</span>
+    ),
+    keras.callbacks.<span class="class">ReduceLROnPlateau</span>(
+        monitor=<span class="string">'val_loss'</span>,
+        factor=<span class="number">0.5</span>,
+        patience=<span class="number">3</span>
+    ),
+    keras.callbacks.<span class="class">ModelCheckpoint</span>(
+        <span class="string">'best_model.keras'</span>,
+        save_best_only=<span class="keyword">True</span>
+    )
+]
+
+<span class="comment"># 5. TRAIN</span>
+history = model.<span class="function">fit</span>(
+    X_train, y_train,
+    epochs=<span class="number">50</span>,
+    batch_size=<span class="number">32</span>,
+    validation_split=<span class="number">0.2</span>,
+    callbacks=callbacks
+)
+
+<span class="comment"># 6. EVALUATE</span>
+test_loss, test_acc = model.<span class="function">evaluate</span>(X_test, y_test)
+<span class="function">print</span>(<span class="string">f"Test Accuracy: {test_acc:.2%}"</span>)
+
+<span class="comment"># 7. SAVE MODEL</span>
+model.<span class="function">save</span>(<span class="string">'final_model.keras'</span>)</pre></div>
+                
+                <h3>Common Issues & Solutions</h3>
+                <table>
+                    <tr><th>Problem</th><th>Signs</th><th>Solution</th></tr>
+                    <tr>
+                        <td>Overfitting</td>
+                        <td>Train acc high, val acc low</td>
+                        <td>Add dropout, regularization, more data</td>
+                    </tr>
+                    <tr>
+                        <td>Underfitting</td>
+                        <td>Both accuracies low</td>
+                        <td>Add layers, neurons, train longer</td>
+                    </tr>
+                    <tr>
+                        <td>Vanishing Gradients</td>
+                        <td>Loss doesn't decrease</td>
+                        <td>Use ReLU, BatchNorm, residual connections</td>
+                    </tr>
+                    <tr>
+                        <td>Exploding Gradients</td>
+                        <td>Loss becomes NaN</td>
+                        <td>Gradient clipping, lower learning rate</td>
+                    </tr>
+                </table>
+                
+                <div class="tip-box">
+                    <strong>💡 Quick Tips:</strong>
+                    <ul>
+                        <li>Always normalize your data (0-1 or standardize)</li>
+                        <li>Start with a simple model, then add complexity</li>
+                        <li>Use validation data to monitor real performance</li>
+                        <li>Learning rate is the most important hyperparameter</li>
+                        <li>Batch size: 32 is a good default</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- PLAYGROUND -->
+            <div id="playground" class="section">
+                <h2>🎮 Neural Network Playground</h2>
+                
+                <div class="card">
+                    <h3>Build Your Own Network</h3>
+                    <p>Adjust the sliders to see how architecture affects the model:</p>
+                    
+                    <div class="flex-row" style="margin: 20px 0;">
+                        <div class="flex-1">
+                            <label>Hidden Layers: <span id="layerVal">2</span></label>
+                            <input type="range" id="layerSlider" min="1" max="5" value="2" style="width: 100%;" oninput="updatePlayground()">
+                        </div>
+                        <div class="flex-1">
+                            <label>Neurons per Layer: <span id="neuronVal">64</span></label>
+                            <input type="range" id="neuronSlider" min="16" max="256" step="16" value="64" style="width: 100%;" oninput="updatePlayground()">
+                        </div>
+                        <div class="flex-1">
+                            <label>Dropout: <span id="dropoutVal">0.2</span></label>
+                            <input type="range" id="dropoutSlider" min="0" max="0.5" step="0.1" value="0.2" style="width: 100%;" oninput="updatePlayground()">
+                        </div>
+                    </div>
+                    
+                    <div class="card-dark" style="padding: 20px;">
+                        <h4>Generated Architecture:</h4>
+                        <div id="archVisual" class="layer-demo"></div>
+                        <div class="code-block" style="margin-top: 15px;">
+                            <pre id="generatedCode"></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-grid" style="margin-top: 20px;">
+                        <div class="metric">
+                            <div class="metric-value" id="paramCount">0</div>
+                            <div class="metric-label">Parameters</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" id="complexityIcon">📊</div>
+                            <div class="metric-label">Complexity</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" id="riskIcon">⚖️</div>
+                            <div class="metric-label">Overfit Risk</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card" style="margin-top: 20px;">
+                    <h3>Interactive Training Demo</h3>
+                    <div class="card-dark" style="padding: 20px;">
+                        <div class="canvas-container">
+                            <canvas id="trainCanvas" width="600" height="200"></canvas>
+                        </div>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <button onclick="runInteractiveTraining()">▶️ Train Network</button>
+                            <button class="secondary" onclick="resetInteractiveTraining()">🔄 Reset</button>
+                        </div>
+                        <div class="metric-grid" style="margin-top: 15px;">
+                            <div class="metric">
+                                <div class="metric-value" id="intEpoch">0</div>
+                                <div class="metric-label">Epoch</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value" id="intTrainAcc">0%</div>
+                                <div class="metric-label">Train Acc</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value" id="intValAcc">0%</div>
+                                <div class="metric-label">Val Acc</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- QUIZ -->
+            <div id="quiz" class="section">
+                <h2>🧪 Test Your Knowledge</h2>
+                
+                <div class="card" id="q1">
+                    <h4>Question 1: What do early layers in a neural network learn?</h4>
+                    <button class="quiz-btn" onclick="checkQuiz(1, this, false)">A) Complete objects like "dog" or "car"</button>
+                    <button class="quiz-btn" onclick="checkQuiz(1, this, true)">B) Simple features like edges and lines</button>
+                    <button class="quiz-btn" onclick="checkQuiz(1, this, false)">C) Only colors</button>
+                    <div id="e1" class="explanation hidden">✅ Correct! Early layers detect simple patterns. Complex understanding is built layer by layer.</div>
+                </div>
+                
+                <div class="card" id="q2">
+                    <h4>Question 2: What is overfitting?</h4>
+                    <button class="quiz-btn" onclick="checkQuiz(2, this, false)">A) Training too slowly</button>
+                    <button class="quiz-btn" onclick="checkQuiz(2, this, true)">B) Memorizing training data instead of learning patterns</button>
+                    <button class="quiz-btn" onclick="checkQuiz(2, this, false)">C) Using too few layers</button>
+                    <div id="e2" class="explanation hidden">✅ Correct! Overfitting means the model memorizes examples but can't generalize to new data.</div>
+                </div>
+                
+                <div class="card" id="q3">
+                    <h4>Question 3: What does dropout do?</h4>
+                    <button class="quiz-btn" onclick="checkQuiz(3, this, false)">A) Removes layers permanently</button>
+                    <button class="quiz-btn" onclick="checkQuiz(3, this, false)">B) Speeds up training</button>
+                    <button class="quiz-btn" onclick="checkQuiz(3, this, true)">C) Randomly disables neurons during training to prevent overfitting</button>
+                    <div id="e3" class="explanation hidden">✅ Correct! Dropout forces the network to learn redundant, robust features.</div>
+                </div>
+                
+                <div class="card" id="q4">
+                    <h4>Question 4: Why use transfer learning?</h4>
+                    <button class="quiz-btn" onclick="checkQuiz(4, this, false)">A) It requires more training data</button>
+                    <button class="quiz-btn" onclick="checkQuiz(4, this, true)">B) It reuses learned features, saving time and data</button>
+                    <button class="quiz-btn" onclick="checkQuiz(4, this, false)">C) It makes the model slower</button>
+                    <div id="e4" class="explanation hidden">✅ Correct! Pre-trained models already know useful features, so you need less data and time.</div>
+                </div>
+                
+                <div class="card" id="q5">
+                    <h4>Question 5: What should you do if validation loss starts increasing while training loss decreases?</h4>
+                    <button class="quiz-btn" onclick="checkQuiz(5, this, true)">A) Stop training (early stopping)</button>
+                    <button class="quiz-btn" onclick="checkQuiz(5, this, false)">B) Train for more epochs</button>
+                    <button class="quiz-btn" onclick="checkQuiz(5, this, false)">C) Remove all dropout</button>
+                    <div id="e5" class="explanation hidden">✅ Correct! This is a sign of overfitting. Stop training and use the weights from before it started.</div>
+                </div>
+                
+                <div class="card" style="text-align: center; margin-top: 20px;">
+                    <h4>Your Score: <span id="quizScore">0</span> / 5</h4>
+                    <button onclick="resetQuiz()">🔄 Try Again</button>
+                </div>
+            </div>
+            
+            <!-- SUMMARY -->
+            <div id="summary" class="section">
+                <h2>📋 Complete Summary</h2>
+                
+                <div class="flex-row">
+                    <div class="flex-1 card">
+                        <h4>🧱 Hierarchical Learning</h4>
+                        <p>Networks learn simple→complex. Edges→Shapes→Parts→Objects. Like building with LEGO blocks.</p>
+                    </div>
+                    <div class="flex-1 card">
+                        <h4>🔄 Training Loop</h4>
+                        <p>Guess → Check Error → Adjust weights. Repeat thousands of times until patterns emerge.</p>
+                    </div>
+                </div>
+                
+                <div class="flex-row">
+                    <div class="flex-1 card">
+                        <h4>⚠️ Overfitting</h4>
+                        <p>Memorizing vs understanding. Prevent with: dropout, regularization, more data, early stopping.</p>
+                    </div>
+                    <div class="flex-1 card">
+                        <h4>🔄 Transfer Learning</h4>
+                        <p>Reuse pre-trained networks. Only train final layers. Needs less data, trains faster.</p>
+                    </div>
+                </div>
+                
+                <h3>Quick Reference Cheatsheet</h3>
+                <table>
+                    <tr><th>Concept</th><th>Key Point</th><th>Code Hint</th></tr>
+                    <tr><td>Create Model</td><td>Stack layers sequentially</td><td><code>keras.Sequential([...])</code></td></tr>
+                    <tr><td>Add Layer</td><td>Dense for fully connected</td><td><code>layers.Dense(128, activation='relu')</code></td></tr>
+                    <tr><td>Prevent Overfit</td><td>Use dropout</td><td><code>layers.Dropout(0.3)</code></td></tr>
+                    <tr><td>Compile</td><td>Set optimizer & loss</td><td><code>model.compile(optimizer='adam', ...)</code></td></tr>
+                    <tr><td>Train</td><td>Fit on data</td><td><code>model.fit(X, y, epochs=10)</code></td></tr>
+                    <tr><td>Transfer Learn</td><td>Freeze base model</td><td><code>base_model.trainable = False</code></td></tr>
+                    <tr><td>Early Stop</td><td>Stop when val_loss rises</td><td><code>EarlyStopping(patience=5)</code></td></tr>
+                </table>
+                
+                <div class="info-box" style="margin-top: 20px;">
+                    <h4>🎉 Congratulations!</h4>
+                    <p>You now understand the fundamentals of how neural networks learn. Practice with the code examples and build your own models!</p>
+                </div>
+                
+                <h3>External Resources</h3>
+                <ul>
+                    <li><a href="https://playground.tensorflow.org/" style="color: #4fc3f7;">TensorFlow Playground</a> - Interactive visualization</li>
+                    <li><a href="https://distill.pub/2017/feature-visualization/" style="color: #4fc3f7;">Distill.pub Feature Visualization</a> - What networks see</li>
+                    <li><a href="https://www.tensorflow.org/tutorials" style="color: #4fc3f7;">TensorFlow Tutorials</a> - Official guides</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // Navigation
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // Dog layers animation
+        function animateDogLayers() {
+            const layers = ['dl1', 'dl2', 'dl3', 'dl4'];
+            layers.forEach(l => {
+                document.getElementById(l).classList.remove('active');
+            });
+            layers.forEach((l, i) => {
+                setTimeout(() => {
+                    document.getElementById(l).classList.add('active');
+                }, i * 500);
+            });
+        }
+        
+        function resetDogLayers() {
+            ['dl1', 'dl2', 'dl3', 'dl4'].forEach(l => {
+                document.getElementById(l).classList.remove('active');
+            });
+        }
+        
+        // Training simulation
+        let trainInterval = null;
+        function startTraining() {
+            if (trainInterval) return;
+            let epoch = 0;
+            trainInterval = setInterval(() => {
+                epoch++;
+                const prog = epoch / 100;
+                const acc = Math.min(98, 5 + prog * 93 + Math.random() * 3);
+                const loss = Math.max(0.02, 2.3 * (1 - prog * 1.2));
+                
+                document.getElementById('epochNum').textContent = epoch;
+                document.getElementById('accVal').textContent = acc.toFixed(0) + '%';
+                document.getElementById('accVal').className = 'metric-value ' + (acc > 80 ? 'good' : '');
+                document.getElementById('lossVal').textContent = loss.toFixed(2);
+                document.getElementById('lossBar').style.width = (loss / 2.3 * 100) + '%';
+                
+                const step = epoch % 3;
+                ['trainStep1', 'trainStep2', 'trainStep3'].forEach((s, i) => {
+                    document.getElementById(s).style.background = i === step ? '#4fc3f7' : '#3a3a6a';
+                    document.getElementById(s).style.color = i === step ? '#1a1a2e' : '#fff';
+                });
+                
+                document.getElementById('statusIcon').textContent = epoch < 20 ? '🎲' : epoch < 60 ? '📈' : epoch < 90 ? '🎯' : '✅';
+                document.getElementById('learnedIcon').textContent = epoch < 30 ? '📐' : epoch < 60 ? '🔷' : epoch < 85 ? '👁️' : '🐕';
+                
+                if (epoch >= 100) {
+                    clearInterval(trainInterval);
+                    trainInterval = null;
+                }
+            }, 60);
+        }
+        
+        function resetTraining() {
+            if (trainInterval) { clearInterval(trainInterval); trainInterval = null; }
+            document.getElementById('epochNum').textContent = '0';
+            document.getElementById('accVal').textContent = '5%';
+            document.getElementById('accVal').className = 'metric-value';
+            document.getElementById('lossVal').textContent = '2.30';
+            document.getElementById('lossBar').style.width = '95%';
+            document.getElementById('statusIcon').textContent = '🎲';
+            document.getElementById('learnedIcon').textContent = '❓';
+        }
+        
+        // Overfit charts
+        function drawLine(ctx, data, color, w, h) {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            data.forEach((v, i) => {
+                const x = (i / (data.length - 1)) * w;
+                const y = h - (v / 100) * h;
+                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+        }
+        
+        function animateOverfitCharts() {
+            const goodCanvas = document.getElementById('goodCanvas');
+            const badCanvas = document.getElementById('badCanvas');
+            const gCtx = goodCanvas.getContext('2d');
+            const bCtx = badCanvas.getContext('2d');
+            let frame = 0;
+            
+            const anim = setInterval(() => {
+                frame++;
+                const p = frame / 40;
+                
+                gCtx.clearRect(0, 0, 280, 150);
+                bCtx.clearRect(0, 0, 280, 150);
+                
+                const gTrain = [], gVal = [], bTrain = [], bVal = [];
+                for (let i = 0; i <= 20; i++) {
+                    const t = i / 20;
+                    if (t <= p) {
+                        gTrain.push(20 + t * 70);
+                        gVal.push(18 + t * 65);
+                        bTrain.push(20 + t * 75);
+                        bVal.push(t < 0.4 ? 18 + t * 55 : 40 - (t - 0.4) * 35);
+                    }
+                }
+                
+                drawLine(gCtx, gTrain, '#4caf50', 280, 150);
+                drawLine(gCtx, gVal, '#81d4fa', 280, 150);
+                drawLine(bCtx, bTrain, '#4caf50', 280, 150);
+                drawLine(bCtx, bVal, '#f44336', 280, 150);
+                
+                // Legend
+                gCtx.font = '11px Arial';
+                gCtx.fillStyle = '#4caf50'; gCtx.fillText('— Train', 10, 15);
+                gCtx.fillStyle = '#81d4fa'; gCtx.fillText('— Val', 70, 15);
+                bCtx.font = '11px Arial';
+                bCtx.fillStyle = '#4caf50'; bCtx.fillText('— Train', 10, 15);
+                bCtx.fillStyle = '#f44336'; bCtx.fillText('— Val', 70, 15);
+                
+                if (frame >= 40) clearInterval(anim);
+            }, 50);
+        }
+        
+        // Playground
+        function updatePlayground() {
+            const layers = parseInt(document.getElementById('layerSlider').value);
+            const neurons = parseInt(document.getElementById('neuronSlider').value);
+            const dropout = parseFloat(document.getElementById('dropoutSlider').value);
+            
+            document.getElementById('layerVal').textContent = layers;
+            document.getElementById('neuronVal').textContent = neurons;
+            document.getElementById('dropoutVal').textContent = dropout.toFixed(1);
+            
+            // Visual
+            let html = '<div class="layer-box"><div class="layer-icon">📥</div><div class="layer-label">INPUT</div><div class="layer-desc">784</div></div>';
+            for (let i = 0; i < layers; i++) {
+                html += '<div class="arrow">→</div>';
+                html += `<div class="layer-box"><div class="layer-icon">🔷</div><div class="layer-label">DENSE</div><div class="layer-desc">${neurons}</div></div>`;
+            }
+            html += '<div class="arrow">→</div>';
+            html += '<div class="layer-box"><div class="layer-icon">📤</div><div class="layer-label">OUTPUT</div><div class="layer-desc">10</div></div>';
+            document.getElementById('archVisual').innerHTML = html;
+            
+            // Code
+            let code = `model = keras.Sequential([\n`;
+            code += `    layers.Dense(${neurons}, activation='relu', input_shape=(784,)),\n`;
+            if (dropout > 0) code += `    layers.Dropout(${dropout.toFixed(1)}),\n`;
+            for (let i = 1; i < layers; i++) {
+                code += `    layers.Dense(${neurons}, activation='relu'),\n`;
+                if (dropout > 0) code += `    layers.Dropout(${dropout.toFixed(1)}),\n`;
+            }
+            code += `    layers.Dense(10, activation='softmax')\n])`;
+            document.getElementById('generatedCode').textContent = code;
+            
+            // Metrics
+            let params = 784 * neurons + neurons;
+            for (let i = 1; i < layers; i++) params += neurons * neurons + neurons;
+            params += neurons * 10 + 10;
+            document.getElementById('paramCount').textContent = params.toLocaleString();
+            document.getElementById('complexityIcon').textContent = layers <= 2 ? '📊' : layers <= 4 ? '📈' : '🚀';
+            document.getElementById('riskIcon').textContent = dropout >= 0.3 ? '✅' : dropout > 0 ? '⚠️' : '❌';
+        }
+        
+        // Interactive training
+        let intTrainInterval = null;
+        function runInteractiveTraining() {
+            if (intTrainInterval) return;
+            const canvas = document.getElementById('trainCanvas');
+            const ctx = canvas.getContext('2d');
+            let epoch = 0;
+            const trainData = [], valData = [];
+            
+            intTrainInterval = setInterval(() => {
+                epoch++;
+                const t = epoch / 50;
+                trainData.push(15 + t * 80 + Math.random() * 5);
+                valData.push(12 + t * 75 + Math.random() * 8);
+                
+                ctx.clearRect(0, 0, 600, 200);
+                ctx.strokeStyle = '#333';
+                for (let i = 0; i <= 4; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, i * 50);
+                    ctx.lineTo(600, i * 50);
+                    ctx.stroke();
+                }
+                
+                drawLine(ctx, trainData, '#4caf50', 600, 200);
+                drawLine(ctx, valData, '#4fc3f7', 600, 200);
+                
+                ctx.font = '12px Arial';
+                ctx.fillStyle = '#4caf50'; ctx.fillText('— Training', 10, 15);
+                ctx.fillStyle = '#4fc3f7'; ctx.fillText('— Validation', 100, 15);
+                
+                document.getElementById('intEpoch').textContent = epoch;
+                document.getElementById('intTrainAcc').textContent = trainData[trainData.length-1].toFixed(0) + '%';
+                document.getElementById('intValAcc').textContent = valData[valData.length-1].toFixed(0) + '%';
+                
+                if (epoch >= 50) { clearInterval(intTrainInterval); intTrainInterval = null; }
+            }, 100);
+        }
+        
+        function resetInteractiveTraining() {
+            if (intTrainInterval) { clearInterval(intTrainInterval); intTrainInterval = null; }
+            const ctx = document.getElementById('trainCanvas').getContext('2d');
+            ctx.clearRect(0, 0, 600, 200);
+            document.getElementById('intEpoch').textContent = '0';
+            document.getElementById('intTrainAcc').textContent = '0%';
+            document.getElementById('intValAcc').textContent = '0%';
+        }
+        
+        // Quiz
+        let score = 0;
+        function checkQuiz(q, btn, correct) {
+            const box = document.getElementById('q' + q);
+            box.querySelectorAll('.quiz-btn').forEach(b => b.disabled = true);
+            btn.classList.add(correct ? 'correct' : 'wrong');
+            if (!correct) {
+                box.querySelectorAll('.quiz-btn').forEach(b => {
+                    if (b.onclick.toString().includes('true')) b.classList.add('correct');
+                });
+            } else {
+                score++;
+                document.getElementById('quizScore').textContent = score;
+            }
+            document.getElementById('e' + q).classList.remove('hidden');
+        }
+        
+        function resetQuiz() {
+            score = 0;
+            document.getElementById('quizScore').textContent = '0';
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById('e' + i).classList.add('hidden');
+                document.getElementById('q' + i).querySelectorAll('.quiz-btn').forEach(b => {
+                    b.disabled = false;
+                    b.classList.remove('correct', 'wrong');
+                });
+            }
+        }
+        
+        // Init
+        updatePlayground();
+        animateOverfitCharts();
+    </script>
+</body>
+</html>
