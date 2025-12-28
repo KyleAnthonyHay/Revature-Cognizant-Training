@@ -1,0 +1,7 @@
+{
+  "best_val_accuracy": 0.949999988079071,
+  "best_val_loss": 0.2966550886631012,
+  "total_epochs_trained": 50,
+  "configured_epochs": 50,
+  "early_stopped": false
+}
