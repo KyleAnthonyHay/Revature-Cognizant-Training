@@ -1,0 +1,38 @@
+Regularization Analysis
+==================================================
+
+1. Which technique was most effective alone?
+   -> Early stopping was most effective: Val Accuracy: 0.8600
+
+2. Did combining techniques help?
+   -> no because the combined approach result is: Val Accuracy: 0.8400
+
+3. What was the train/val gap for each?
+Task 3.1: Baseline (Overfitting)
+Train Accuracy: 1.0000
+Val Accuracy:   0.8300
+Gap:            0.1700
+Task 3.2: Dropout
+Train Accuracy: 0.9950
+Val Accuracy:   0.8500
+Gap:            0.1450
+Note that the dropout regularization did not fix the overfiting problem
+Task 3.3: L2 Regularization
+Train Accuracy: 1.0000
+Val Accuracy:   0.8400
+Gap:            0.1600
+Note that the L2 regularization also did not fix the overfiting problem!
+Task 3.4: Early Stopping
+Stopped at epoch: 14
+Train Accuracy: 1.0000
+Val Accuracy:   0.8600
+Gap:            0.1400
+Note that the early stopping was the most effective but it still did not fix the overfiting problem
+Task 3.5: Combined Regularization
+Stopped at epoch: 65
+Train Accuracy: 1.0000
+Val Accuracy:   0.8400
+Gap:            0.1600
+
+4. What's the tradeoff between regularization and model capacity?
+   -> More regularization = lower train acc but better generalization
