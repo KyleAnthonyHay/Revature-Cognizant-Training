@@ -1,7 +1,16 @@
-numpy
+# numpy
 pandas
 scikit-learn
-matplotlib
-tensorflow==2.16.2
+# matplotlib
+tensorflow>=2.19.0
 seaborn
 jupyter
+transformers
+tensorflow-hub
+
+# keras-nlp
+# tensorflow==2.16.2
+
+numpy>=1.21.0
+sentence-transformers>=2.2.0
+matplotlib>=3.4.0
